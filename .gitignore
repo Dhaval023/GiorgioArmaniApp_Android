@@ -1,0 +1,56 @@
+# Built app files
+*.apk
+*.aab
+*.ap_
+
+# Compiled files
+*.dex
+*.class
+
+# Gradle & build
+.gradle/
+build/
+**/build/
+
+# Local config
+local.properties
+
+# Logs
+*.log
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*~
+
+# Navigation / captures
+.navigation/
+captures/
+
+# Keystore (IMPORTANT)
+*.jks
+*.keystore
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# Google services (optional - keep if needed)
+google-services.json
+
+# Kotlin
+.kotlin/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache / temp / reports
+*.bin
+*.lock
+*.probe
+*.html
+*.hprof
