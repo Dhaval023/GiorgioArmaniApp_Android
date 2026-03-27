@@ -2,6 +2,7 @@ package com.example.giorgioarmaniapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -10,6 +11,9 @@ import com.google.android.material.appbar.MaterialToolbar
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Handle the splash screen transition before super.onCreate()
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -21,10 +25,9 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         // Specify top-level destinations (the ones that won't have a back button)
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_login))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_login, R.id.nav_home))
 
         // This links the navigation graph with the action bar.
-        // It will automatically use the "android:label" from mobile_navigation.xml for the title.
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 

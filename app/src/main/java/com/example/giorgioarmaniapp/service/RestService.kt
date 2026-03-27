@@ -18,4 +18,12 @@ class RestService {
             response?.let { gson.fromJson(it, GetLoginDetailsResponse::class.java) }
         } catch (e: Exception) { null }
     }
+    suspend fun gtinPatternPost(): GTINPatternModel.GTINPatternResponse? {
+        return try {
+            val uri = ServiceConfiguration.postGTINPatternListURL
+            val resource = "${ServiceConfiguration.URL}$uri"
+            val response = RestClientService.executePostRequestAsync(resource, "")
+            response?.let { gson.fromJson(it, GTINPatternModel.GTINPatternResponse::class.java) }
+        } catch (e: Exception) { null }
+    }
 }

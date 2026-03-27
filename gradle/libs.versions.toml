@@ -13,6 +13,7 @@ tracingPerfettoHandshake = "1.0.1"
 library = "3.2.0-alpha11"
 zebraRfid = "2.0.2.124"
 zebraScanner = "2.7.0.0"
+coreSplashscreen = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -27,6 +28,7 @@ androidx-tracing-perfetto-handshake = { group = "androidx.tracing", name = "trac
 androidx-library = { group = "androidx.databinding", name = "library", version.ref = "library" }
 zebra-rfid = { group = "com.zebra.rfid.api3", name = "rfid-api3-sdk", version.ref = "zebraRfid" }
 zebra-scanner = { group = "com.zebra.scannercontrol", name = "scanner-sdk-android", version.ref = "zebraScanner" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
