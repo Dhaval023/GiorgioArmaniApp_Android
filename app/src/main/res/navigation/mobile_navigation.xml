@@ -19,6 +19,33 @@
         android:id="@+id/nav_home"
         android:name="com.example.giorgioarmaniapp.ui.login_page.home_page.HomePageFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePage_to_loginPage"
+            app:destination="@id/nav_login"
+            app:popUpTo="@id/nav_login"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_homePage_to_settingPage"
+            app:destination="@id/nav_setting" />
+
+        <action
+            android:id="@+id/action_homePage_to_searchPage"
+            app:destination="@id/nav_search" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.home_page.SettingPageFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_setting_page" />
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.search_page.SearchPageFragment"
+        android:label="Tag Locator"
+        tools:layout="@layout/fragment_search_page" />
 
 </navigation>

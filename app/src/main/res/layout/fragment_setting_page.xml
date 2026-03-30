@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <!-- ROW 0: Height 300dp — RFID Power Section -->
+
+            <!-- ROW 1: Auto — App Version Section -->
+            <LinearLayout
+                android:id="@+id/rfidPowerSection"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!--
+                COMMENTED ORIGINAL SECTION (Slider-based RFID Power):
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RFID Power"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="0dp" />
+
+                <SeekBar
+                    android:id="@+id/rfidPowerSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:min="0"
+                    android:max="270"
+                    android:thumbTint="@color/black"
+                    android:progressTint="@color/black"
+                    android:progressBackgroundTint="@color/AppGrayColor" />
+
+                <TextView
+                    android:id="@+id/displayLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center_horizontal" />
+                -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="RFID Power"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:orientation="vertical">
+
+                    <androidx.gridlayout.widget.GridLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:columnCount="3"
+                        app:rowCount="3">
+
+                        <!-- Inbound Row -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="start|center_vertical"
+                            android:text="Inbound"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_column="0"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="start|center_vertical"
+                            app:layout_row="0"
+                            app:layout_rowWeight="1" />
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_column="1"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="fill_horizontal|top"
+                            app:layout_row="0">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="5dp"
+                                app:boxCornerRadiusBottomStart="5dp"
+                                app:boxCornerRadiusTopEnd="5dp"
+                                app:boxCornerRadiusTopStart="5dp"
+                                app:boxStrokeColor="@color/black">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/InboundEntry"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:hint="Power"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="number"
+                                    android:maxLength="3"
+                                    android:paddingStart="5dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </FrameLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSetInbound"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:backgroundTint="@color/black"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="SET"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="5dp"
+                            app:layout_column="2"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="end|center_vertical"
+                            app:layout_row="0" />
+
+                        <!-- Outbound Row -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="start|center_vertical"
+                            android:text="Outbound"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_column="0"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="start|center_vertical"
+                            app:layout_row="1"
+                            app:layout_rowWeight="1" />
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_column="1"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="fill_horizontal|top"
+                            app:layout_row="1">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="5dp"
+                                app:boxCornerRadiusBottomStart="5dp"
+                                app:boxCornerRadiusTopEnd="5dp"
+                                app:boxCornerRadiusTopStart="5dp"
+                                app:boxStrokeColor="@color/black">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/OutboundEntry"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:hint="Power"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="number"
+                                    android:maxLength="3"
+                                    android:paddingStart="5dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </FrameLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSetOutbound"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:backgroundTint="@color/black"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="SET"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="5dp"
+                            app:layout_column="2"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="end|center_vertical"
+                            app:layout_row="1" />
+
+                        <!-- StockTake Row -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="start|center_vertical"
+                            android:text="StockTake"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_column="0"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="start|center_vertical"
+                            app:layout_row="2"
+                            app:layout_rowWeight="1" />
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_column="1"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="fill_horizontal|top"
+                            app:layout_row="2">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="5dp"
+                                app:boxCornerRadiusBottomStart="5dp"
+                                app:boxCornerRadiusTopEnd="5dp"
+                                app:boxCornerRadiusTopStart="5dp"
+                                app:boxStrokeColor="@color/black">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/StocktakeEntry"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:hint="Power"
+                                    android:imeOptions="actionDone"
+                                    android:inputType="number"
+                                    android:maxLength="3"
+                                    android:paddingStart="5dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </FrameLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSetStocktake"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:backgroundTint="@color/black"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="SET"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="5dp"
+                            app:layout_column="2"
+                            app:layout_columnWeight="1"
+                            app:layout_gravity="end|center_vertical"
+                            app:layout_row="2" />
+
+                    </androidx.gridlayout.widget.GridLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/appVersionSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/rfidPowerSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="App Version#"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_gravity="start|center_vertical" />
+
+                <TextView
+                    android:id="@+id/tvVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginStart="10dp" />
+
+            </LinearLayout>
+
+            <!--
+            COMMENTED SECTIONS (SDK / Reader / Radio version rows):
+
+            <LinearLayout orientation="horizontal">
+                <TextView text="SDK" />
+                <TextView android:id="@+id/tvSdkVersion" layout_gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout orientation="horizontal">
+                <TextView text="Reader" />
+                <TextView android:id="@+id/tvReader" layout_gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout orientation="horizontal">
+                <TextView text="Radio" />
+                <TextView android:id="@+id/tvRadio" layout_gravity="end" />
+            </LinearLayout>
+            -->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</LinearLayout>

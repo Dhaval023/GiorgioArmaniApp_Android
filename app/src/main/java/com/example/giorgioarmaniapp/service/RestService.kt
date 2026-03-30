@@ -26,4 +26,13 @@ class RestService {
             response?.let { gson.fromJson(it, GTINPatternModel.GTINPatternResponse::class.java) }
         } catch (e: Exception) { null }
     }
+    suspend fun passcodePost(passcode: String): PasscodeModel.ResponsePasscodeModel? {
+        return try {
+            val uri = String.format(ServiceConfiguration.postPasscodeURL, passcode)
+            val resource = "${ServiceConfiguration.URL}$uri"
+            val response = RestClientService.executePostRequestAsync(resource, "")
+            response?.let { gson.fromJson(it, PasscodeModel.ResponsePasscodeModel::class.java) }
+        } catch (e: Exception) { null }
+    }
+
 }

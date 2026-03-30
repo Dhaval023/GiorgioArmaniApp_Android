@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,8 @@ class LoginPageFragment : Fragment() {
     private lateinit var usernameEntry: TextInputEditText
     private lateinit var passwordEntry: TextInputEditText
     private lateinit var loginButton: MaterialButton
+    private lateinit var progressBar: ProgressBar        // ADD
+//    private lateinit var loadingOverlay: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +37,8 @@ class LoginPageFragment : Fragment() {
         usernameEntry = view.findViewById(R.id.UsernameEntry)
         passwordEntry = view.findViewById(R.id.PasswordEntry)
         loginButton = view.findViewById(R.id.LoginButton)
+        progressBar = view.findViewById(R.id.progressBar)      // ADD
+//        loadingOverlay = view.findViewById(R.id.loadingOverlay)
 
         loginButton.setOnClickListener {
             viewModel.usernameText = usernameEntry.text?.toString() ?: ""
@@ -70,6 +75,8 @@ class LoginPageFragment : Fragment() {
 
     private fun showLoading(show: Boolean) {
         loginButton.isEnabled = !show
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+//        loadingOverlay.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showAlert(message: String) {

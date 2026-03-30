@@ -26,6 +26,8 @@ class HomePageViewModel : ViewModel() {
     private val _menuItems = MutableLiveData<List<HomePageMenuModel>>()
     val menuItems: LiveData<List<HomePageMenuModel>> = _menuItems
 
+    private val _navigateTo = MutableLiveData<String?>()
+    val navigateTo: LiveData<String?> = _navigateTo
     private var _gtinPatternList: ArrayList<GTINPatternModel.GTINPattern> = ArrayList()
     var gtinPatternList: ArrayList<GTINPatternModel.GTINPattern>
         get() = _gtinPatternList
@@ -100,25 +102,25 @@ class HomePageViewModel : ViewModel() {
                         HomeMenuEnums.INBOUND -> {
                             showLoading()
                             delay(50)
-                            navigate("PendingInboundPage")
+                            _navigateTo.postValue("PendingInboundPage")
                         }
 
                         HomeMenuEnums.OUTBOUND -> {
                             showLoading()
                             delay(50)
-                            navigate("OutboundMainPage")
+                            _navigateTo.postValue("OutboundMainPage")
                         }
 
                         HomeMenuEnums.SEARCH -> {
                             showLoading()
                             delay(50)
-                            navigate("SearchPage")
+                            _navigateTo.postValue("SearchPage")
                         }
 
                         HomeMenuEnums.STOCKTAKE -> {
                             showLoading()
                             delay(50)
-                            navigate("StockTakeSelectionPage")
+                            _navigateTo.postValue("StockTakeSelectionPage")
                         }
 
                         else -> {}
@@ -129,7 +131,6 @@ class HomePageViewModel : ViewModel() {
             }
         }
     }
-
     fun clearUserData() {
         Settings.userId = 0
         Settings.userType = ""
@@ -149,14 +150,17 @@ class HomePageViewModel : ViewModel() {
         isBusy = true
 
         try {
-            navigate("PasscodePopup")
+            _navigateTo.value = "PasscodePopup"
         } catch (ex: Exception) {
             Log.d("ERROR", ex.toString())
         }
 
         isBusy = false
     }
-
+    fun onNavigationHandled() {
+        _navigateTo.value = null
+        isBusy = false
+    }
     fun GTINPatternList() {
         viewModelScope.launch {
             try {
