@@ -72,6 +72,10 @@ class HomePageFragment : Fragment() {
                     findNavController().navigate(R.id.action_homePage_to_searchPage)
                     viewModel.onNavigationHandled()
                 }
+                "PendingInboundPage" -> {
+                    findNavController().navigate(R.id.action_homePage_to_inboundPage)
+                    viewModel.onNavigationHandled()
+                }
             }
         }
 

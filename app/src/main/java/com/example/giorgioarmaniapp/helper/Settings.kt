@@ -3,6 +3,7 @@ package com.example.giorgioarmaniapp.helper.base
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.giorgioarmaniapp.models.GTINPatternModel.GTINPattern
+import com.example.giorgioarmaniapp.service.RestService
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlin.collections.isNotEmpty
@@ -11,6 +12,8 @@ object Settings {
 
     private lateinit var prefs: SharedPreferences
     private val gson = Gson()
+    
+    val service = RestService()
 
     fun init(context: Context) {
         prefs = context.getSharedPreferences("GiorgioArmaniPrefs", Context.MODE_PRIVATE)

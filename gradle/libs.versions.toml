@@ -14,6 +14,8 @@ library = "3.2.0-alpha11"
 zebraRfid = "2.0.2.124"
 zebraScanner = "2.7.0.0"
 coreSplashscreen = "1.0.1"
+gamesActivity = "4.4.0"
+impress = "0.0.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,6 +31,8 @@ androidx-library = { group = "androidx.databinding", name = "library", version.r
 zebra-rfid = { group = "com.zebra.rfid.api3", name = "rfid-api3-sdk", version.ref = "zebraRfid" }
 zebra-scanner = { group = "com.zebra.scannercontrol", name = "scanner-sdk-android", version.ref = "zebraScanner" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-games-activity = { group = "androidx.games", name = "games-activity", version.ref = "gamesActivity" }
+impress = { group = "com.google.ar", name = "impress", version.ref = "impress" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

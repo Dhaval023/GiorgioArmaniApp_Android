@@ -32,7 +32,6 @@ class ReaderModel private constructor(context: Context) :
 
     init {
         Readers.attach(this)
-        setup()
     }
 
     fun setup() {
@@ -47,6 +46,7 @@ class ReaderModel private constructor(context: Context) :
     var statusEvent: ((IEvents.StatusEventData) -> Unit)? = null
     var readerConnectionEvent: ((Boolean) -> Unit)? = null
     var readerAppearanceEvent: ((Boolean) -> Unit)? = null
+    var barcodeEvent: ((String, Int, Short) -> Unit)? = null
 
     val isConnected: Boolean
         get() = try {
@@ -76,15 +76,6 @@ class ReaderModel private constructor(context: Context) :
             readers = Readers(appContext, ENUM_TRANSPORT.BLUETOOTH)
             readersList = readers!!.GetAvailableRFIDReaderList()
         }
-
-        // if (isConnected) {
-        //     var id = 0
-        //     while (id < readersList.size) {
-        //         if (readersList[id].rfidReader.hostName == rfidReader?.hostName) break
-        //         id++
-        //     }
-        //     readersList[id] = readerDevice!!
-        // }
 
         return readersList
     }
@@ -145,15 +136,9 @@ class ReaderModel private constructor(context: Context) :
                 reader.Events.setBufferFullEvent(true)
                 reader.Events.setBufferFullWarningEvent(true)
 
-                // rfidReader.Config.SetTriggerMode(ENUM_TRIGGER_MODE.RfidMode, true) — commented in original
                 reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true)
 
                 reader.Config.saveConfig()
-
-                // val antenna = reader.Config.Antennas.GetAntennaRfConfig(1)
-                // antenna.SetrfModeTableIndex(0)
-                // antenna.TransmitPowerIndex = reader.ReaderCapabilities.GetTransmitPowerLevelValues().size - 1
-                // reader.Config.Antennas.SetAntennaRfConfig(1, antenna)
 
                 val singulation = reader.Config.Antennas.getSingulationControl(1)
                 singulation.session = SESSION.SESSION_S0
@@ -166,12 +151,6 @@ class ReaderModel private constructor(context: Context) :
                 antennaRfConfig.tari = 0
                 antennaRfConfig.transmitPowerIndex = 270
                 reader.Config.Antennas.setAntennaRfConfig(1, antennaRfConfig)
-
-                // val triggerInfo = TriggerInfo()
-                // triggerInfo.startTrigger.triggerType = START_TRIGGER_TYPE.START_TRIGGER_TYPE_IMMEDIATE
-                // triggerInfo.stopTrigger.triggerType  = STOP_TRIGGER_TYPE.STOP_TRIGGER_TYPE_IMMEDIATE
-                // reader.Config.startTrigger = triggerInfo.startTrigger
-                // reader.Config.stopTrigger  = triggerInfo.stopTrigger
 
                 val tagFields = arrayOf(TAG_FIELD.PEAK_RSSI, TAG_FIELD.TAG_SEEN_COUNT)
                 reader.Config.tagStorageSettings.setTagFields(tagFields)
@@ -213,7 +192,6 @@ class ReaderModel private constructor(context: Context) :
             executor.execute {
                 try {
                     rfidReader?.Config?.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true)
-                    // rfidReader?.Config?.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true) — commented in original
                 } catch (e: OperationFailureException) {
                     e.printStackTrace()
                 }
@@ -233,7 +211,6 @@ class ReaderModel private constructor(context: Context) :
         if (isConnected) {
             executor.execute {
                 try {
-                    // rfidReader?.Config?.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true) — commented in original
                     rfidReader?.Config?.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true)
                 } catch (e: OperationFailureException) {
                     e.printStackTrace()

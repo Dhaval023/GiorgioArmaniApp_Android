@@ -1,10 +1,15 @@
 package com.example.giorgioarmaniapp.ui.login_page
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,8 +25,17 @@ class LoginPageFragment : Fragment() {
     private lateinit var usernameEntry: TextInputEditText
     private lateinit var passwordEntry: TextInputEditText
     private lateinit var loginButton: MaterialButton
-    private lateinit var progressBar: ProgressBar        // ADD
-//    private lateinit var loadingOverlay: View
+    private lateinit var progressBar: ProgressBar
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val allGranted = permissions.entries.all { it.value }
+            if (allGranted) {
+                BaseViewModel.rfidModel.setup()
+            } else {
+                showAlert("Permissions are required for Bluetooth functionality.")
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,8 +51,9 @@ class LoginPageFragment : Fragment() {
         usernameEntry = view.findViewById(R.id.UsernameEntry)
         passwordEntry = view.findViewById(R.id.PasswordEntry)
         loginButton = view.findViewById(R.id.LoginButton)
-        progressBar = view.findViewById(R.id.progressBar)      // ADD
-//        loadingOverlay = view.findViewById(R.id.loadingOverlay)
+        progressBar = view.findViewById(R.id.progressBar)
+
+        checkAndRequestPermissions()
 
         loginButton.setOnClickListener {
             viewModel.usernameText = usernameEntry.text?.toString() ?: ""
@@ -73,10 +88,32 @@ class LoginPageFragment : Fragment() {
         }
     }
 
+    private fun checkAndRequestPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.BLUETOOTH_SCAN)
+            }
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.BLUETOOTH_CONNECT)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
+        } else {
+            BaseViewModel.rfidModel.setup()
+        }
+    }
+
     private fun showLoading(show: Boolean) {
         loginButton.isEnabled = !show
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
-//        loadingOverlay.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showAlert(message: String) {

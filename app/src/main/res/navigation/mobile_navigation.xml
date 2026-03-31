@@ -34,6 +34,10 @@
             android:id="@+id/action_homePage_to_searchPage"
             app:destination="@id/nav_search" />
 
+        <action
+            android:id="@+id/action_homePage_to_inboundPage"
+            app:destination="@id/nav_inbound" />
+
     </fragment>
 
     <fragment
@@ -47,5 +51,33 @@
         android:name="com.example.giorgioarmaniapp.ui.login_page.search_page.SearchPageFragment"
         android:label="Tag Locator"
         tools:layout="@layout/fragment_search_page" />
+
+    <fragment
+        android:id="@+id/nav_inbound"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.inbound_page.PendingInboundFragment"
+        android:label="Pending Inbound List"
+        tools:layout="@layout/fragment_pending_inbound">
+        <action
+            android:id="@+id/action_pendingInbound_to_inboundPage"
+            app:destination="@id/nav_inbound_details" />
+        <action
+            android:id="@+id/action_pendingInbound_to_passcode"
+            app:destination="@id/nav_passcode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_inbound_details"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.inbound_page.InboundPageFragment"
+        android:label="Inbound Details"
+        tools:layout="@layout/fragment_inbound_page">
+        <action
+            android:id="@+id/action_inboundPage_to_passcodePopup"
+            app:destination="@id/nav_passcode" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/nav_passcode"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment"
+        android:label="Passcode" />
 
 </navigation>

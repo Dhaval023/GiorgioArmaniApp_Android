@@ -1,9 +1,12 @@
 package com.example.giorgioarmaniapp.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 class InboundPendingListModel {
 
+    @Parcelize
     data class InboundPendingModel(
 
         @SerializedName("ArticleNumber")
@@ -16,23 +19,24 @@ class InboundPendingListModel {
         val deliveryItem: String?,
 
         @SerializedName("ActualQuantityDelivered")
-        val actualQuantityDelivered: Int,
+        var actualQuantityDelivered: Int,
 
         @SerializedName("ScannedQTY")
-        val scannedQTY: Int,
+        var scannedQTY: Int,
 
         @SerializedName("IsDelTag")
-        val isDelTag: Boolean,
+        var isDelTag: Boolean,
 
         // Store color as String (e.g. "#FF0000")
         @SerializedName("InvalidGTINNumberCLR")
         val invalidGTINNumberCLR: String?,
 
         @SerializedName("IsInvalidCount")
-        val isInvalidCount: Boolean
-    )
+        var isInvalidCount: Boolean
+    ) : Parcelable
 
     // --- InboundPendingListResult ---
+    @Parcelize
     data class InboundPendingListResult(
 
         @SerializedName("DeliveryNumber")
@@ -46,7 +50,7 @@ class InboundPendingListModel {
 
         // UI state (not from API)
         var isExpander: Boolean = true
-    )
+    ) : Parcelable
 
     // --- ResponseInboundPendingList ---
     data class ResponseInboundPendingList(

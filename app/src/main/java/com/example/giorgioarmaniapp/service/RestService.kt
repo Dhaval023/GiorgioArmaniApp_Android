@@ -35,4 +35,23 @@ class RestService {
         } catch (e: Exception) { null }
     }
 
+    suspend fun getInboundPendingList(storeCode: String): InboundPendingListModel.ResponseInboundPendingList? {
+        return try {
+            val uri = String.format(ServiceConfiguration.getInboundPendingListURL, storeCode)
+            val resource = "${ServiceConfiguration.URL}$uri"
+            val response = RestClientService.executePostRequestAsync(resource, "")
+            response?.let { gson.fromJson(it, InboundPendingListModel.ResponseInboundPendingList::class.java) }
+        } catch (e: Exception) { null }
+    }
+
+    suspend fun submitInboundList(userID: String, listModel: InboundPendingListModel.InboundPendingListResult): InboundPendingListModel.ResponseSubmitInboundPendingList? {
+        return try {
+            val uri = String.format(ServiceConfiguration.postInboundSubmitListURL, userID)
+            val resource = "${ServiceConfiguration.URL}$uri"
+            val obj = gson.toJson(listModel)
+            val response = RestClientService.executePostRequestAsync(resource, obj)
+            response?.let { gson.fromJson(it, InboundPendingListModel.ResponseSubmitInboundPendingList::class.java) }
+        } catch (e: Exception) { null }
+    }
+
 }

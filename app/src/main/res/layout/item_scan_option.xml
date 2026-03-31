@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rbScanOption"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="8dp"
+    android:paddingEnd="12dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:textSize="16sp"
+    android:textColor="#000000"
+    android:clickable="false"
+    android:focusable="false"
+    android:buttonTint="#000000"
+    android:text="RFID" />
