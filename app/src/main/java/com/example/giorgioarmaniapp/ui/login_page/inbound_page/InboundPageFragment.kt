@@ -78,17 +78,14 @@ class InboundPageFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        // Originally: viewmodel.UpdateBarcodeOut() called in constructor
         viewModel.updateBarcodeOut()
         hideKeyboard()
 
-        // Originally: if (arg != null) { viewmodel.PendingInboundData = arg; }
         if (pendingInboundData != null) {
             viewModel.pendingInboundData = pendingInboundData
         }
 
-        // Originally: Title = viewmodel.PendingInboundData.DeliveryNumber
-        activity?.title = viewModel.pendingInboundData?.deliveryNumber ?: ""
+        toolbar.title = viewModel.pendingInboundData?.deliveryNumber ?: "Inbound Detail"
 
         setupScanOptions(view)
         setupInboundList(view)

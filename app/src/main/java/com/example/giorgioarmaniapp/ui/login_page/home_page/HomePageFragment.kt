@@ -3,6 +3,7 @@ package com.example.giorgioarmaniapp.ui.login_page.home_page
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.view.*
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
@@ -23,6 +24,8 @@ class HomePageFragment : Fragment() {
     private val viewModel: HomePageViewModel by viewModels()
     private lateinit var adapter: HomePageAdapter
 
+    private lateinit var progressBar: ProgressBar
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,11 +41,10 @@ class HomePageFragment : Fragment() {
         val txtStoreName = view.findViewById<TextView>(R.id.txtStoreName)
         val txtEmployeeName = view.findViewById<TextView>(R.id.txtEmployeeName)
         val recyclerView = view.findViewById<RecyclerView>(R.id.menuRecyclerView)
+        progressBar = view.findViewById(R.id.progressBar)
 
-        // Setup RecyclerView
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        // Observe menu items
         viewModel.menuItems.observe(viewLifecycleOwner) { items ->
             adapter = HomePageAdapter(items) { model ->
                 viewModel.menuItemTap(model)
@@ -50,19 +52,20 @@ class HomePageFragment : Fragment() {
             recyclerView.adapter = adapter
         }
 
-        // Observe store name
         viewModel.storeName.observe(viewLifecycleOwner) { name ->
             txtStoreName.text = name
         }
 
-        // Observe employee name
         viewModel.employeeName.observe(viewLifecycleOwner) { name ->
             txtEmployeeName.text = name
         }
 
-        // ✅ Observe navigation events
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            showLoading(isLoading)
+        }
+
         viewModel.navigateTo.observe(viewLifecycleOwner) { destination ->
-            destination ?: return@observe // ignore null (already handled)
+            destination ?: return@observe
             when (destination) {
                 "PasscodePopup" -> {
                     PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
@@ -76,10 +79,18 @@ class HomePageFragment : Fragment() {
                     findNavController().navigate(R.id.action_homePage_to_inboundPage)
                     viewModel.onNavigationHandled()
                 }
+                "OutboundMainPage" -> {
+                    findNavController().navigate(R.id.action_homePage_to_outboundMainPage)
+                    viewModel.onNavigationHandled()
+                }
+                "StockTakeSelectionPage" -> {
+                    // TODO: Implement navigation when the destination is added to mobile_navigation.xml
+                    // findNavController().navigate(R.id.action_homePage_to_stockTakeSelectionPage)
+                    viewModel.onNavigationHandled()
+                }
             }
         }
 
-        // Setup Settings menu icon
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -98,7 +109,6 @@ class HomePageFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        // Setup Logout icon
         val originalDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.log_off)
         if (originalDrawable != null) {
             val iconSizePx = (40 * resources.displayMetrics.density).toInt()
@@ -139,5 +149,8 @@ class HomePageFragment : Fragment() {
                 .setNegativeButton("No", null)
                 .show()
         }
+    }
+    private fun showLoading(show: Boolean) {
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

@@ -38,6 +38,10 @@
             android:id="@+id/action_homePage_to_inboundPage"
             app:destination="@id/nav_inbound" />
 
+        <action
+            android:id="@+id/action_homePage_to_outboundMainPage"
+            app:destination="@id/nav_outbound_main" />
+
     </fragment>
 
     <fragment
@@ -68,10 +72,37 @@
     <fragment
         android:id="@+id/nav_inbound_details"
         android:name="com.example.giorgioarmaniapp.ui.login_page.inbound_page.InboundPageFragment"
-        android:label="Inbound Details"
+        android:label="{deliveryNumber}"
         tools:layout="@layout/fragment_inbound_page">
+        <argument
+            android:name="deliveryNumber"
+            app:argType="string"
+            android:defaultValue="Inbound Detail" />
         <action
             android:id="@+id/action_inboundPage_to_passcodePopup"
+            app:destination="@id/nav_passcode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_outbound_main"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.Outbound_page.OutboundMainPageFragment"
+        android:label="Outbound"
+        tools:layout="@layout/fragment_outbound_main_page">
+        <action
+            android:id="@+id/action_outboundMainPage_to_passcodePopup"
+            app:destination="@id/nav_passcode" />
+        <action
+            android:id="@+id/action_outboundMainPage_to_stockTransfer"
+            app:destination="@id/nav_stock_transfer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_stock_transfer"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.Outbound_page.OutboundStockTransferPageFragment"
+        android:label="Stock Transfer"
+        tools:layout="@layout/fragment_outbound_stocktransfer_page">
+        <action
+            android:id="@+id/action_stockTransfer_to_passcode"
             app:destination="@id/nav_passcode" />
     </fragment>
 

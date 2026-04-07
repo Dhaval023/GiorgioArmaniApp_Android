@@ -28,6 +28,10 @@ class HomePageViewModel : ViewModel() {
 
     private val _navigateTo = MutableLiveData<String?>()
     val navigateTo: LiveData<String?> = _navigateTo
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     private var _gtinPatternList: ArrayList<GTINPatternModel.GTINPattern> = ArrayList()
     var gtinPatternList: ArrayList<GTINPatternModel.GTINPattern>
         get() = _gtinPatternList
@@ -96,38 +100,36 @@ class HomePageViewModel : ViewModel() {
             try {
                 if (handleInternetConnection()) {
                     if (model == null) return@launch
+                    
+                    _isLoading.value = true
+                    delay(1000) //1 sec
 
                     when (model.homeMenuNavType) {
 
                         HomeMenuEnums.INBOUND -> {
-                            showLoading()
-                            delay(50)
                             _navigateTo.postValue("PendingInboundPage")
                         }
 
                         HomeMenuEnums.OUTBOUND -> {
-                            showLoading()
-                            delay(50)
                             _navigateTo.postValue("OutboundMainPage")
                         }
 
                         HomeMenuEnums.SEARCH -> {
-                            showLoading()
-                            delay(50)
                             _navigateTo.postValue("SearchPage")
                         }
 
                         HomeMenuEnums.STOCKTAKE -> {
-                            showLoading()
-                            delay(50)
                             _navigateTo.postValue("StockTakeSelectionPage")
                         }
 
-                        else -> {}
+                        else -> {
+                            _isLoading.value = false
+                        }
                     }
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
+                _isLoading.value = false
             }
         }
     }
@@ -159,6 +161,7 @@ class HomePageViewModel : ViewModel() {
     }
     fun onNavigationHandled() {
         _navigateTo.value = null
+        _isLoading.value = false
         isBusy = false
     }
     fun GTINPatternList() {
@@ -183,14 +186,6 @@ class HomePageViewModel : ViewModel() {
 
     private suspend fun handleInternetConnection(): Boolean {
         return true
-    }
-
-    private fun showLoading() {
-        // TODO: Add loader
-    }
-
-    private fun navigate(page: String) {
-        // TODO: Navigation logic
     }
 
     private fun showAlert(title: String, message: String) {

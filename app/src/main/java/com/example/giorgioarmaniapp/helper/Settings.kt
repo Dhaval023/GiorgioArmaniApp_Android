@@ -6,7 +6,6 @@ import com.example.giorgioarmaniapp.models.GTINPatternModel.GTINPattern
 import com.example.giorgioarmaniapp.service.RestService
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlin.collections.isNotEmpty
 
 object Settings {
 
@@ -14,6 +13,8 @@ object Settings {
     private val gson = Gson()
     
     val service = RestService()
+
+    private const val PREFIX_GTIN_LIST_KEY = "PrifixGTINList_key"
 
     fun init(context: Context) {
         prefs = context.getSharedPreferences("GiorgioArmaniPrefs", Context.MODE_PRIVATE)
@@ -65,13 +66,20 @@ object Settings {
 
     var prefixGTINList: List<GTINPattern>
         get() {
-            val json = prefs.getString("PrifixGTINList_key", "") ?: ""
-            if (json.isEmpty()) return emptyList()
-            val type = object : TypeToken<List<GTINPattern>>() {}.type
-            return gson.fromJson(json, type)
+            val value = prefs.getString(PREFIX_GTIN_LIST_KEY, "") ?: ""
+            return if (value.isEmpty()) {
+                ArrayList<GTINPattern>()
+            } else {
+                try {
+                    val type = object : TypeToken<List<GTINPattern>>() {}.type
+                    gson.fromJson(value, type)
+                } catch (e: Exception) {
+                    ArrayList<GTINPattern>()
+                }
+            }
         }
         set(value) {
-            val json = if (value.isNotEmpty()) gson.toJson(value) else ""
-            prefs.edit().putString("PrifixGTINList_key", json).apply()
+            val data = gson.toJson(value)
+            prefs.edit().putString(PREFIX_GTIN_LIST_KEY, data).apply()
         }
 }

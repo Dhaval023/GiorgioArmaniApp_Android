@@ -66,6 +66,7 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
         adapter = PendingInboundAdapter {
             val bundle = Bundle().apply {
                 putParcelable(InboundPageFragment.ARG_PENDING_INBOUND_DATA, it)
+                putString("deliveryNumber", it.deliveryNumber)
             }
             findNavController().navigate(R.id.action_pendingInbound_to_inboundPage, bundle)
         }
