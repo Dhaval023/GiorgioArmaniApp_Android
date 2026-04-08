@@ -1,50 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="0dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <!-- Store Code Picker -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardStoreCode"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10dp"
-                app:cardBackgroundColor="@color/white"
-                app:strokeColor="@color/black"
-                app:strokeWidth="1dp"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="0dp">
-
-                <Spinner
-                    android:id="@+id/spinnerStoreCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </com.google.android.material.card.MaterialCardView>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="10dp">
 
+                <!-- Store Code Picker -->
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardLocation"
-                    android:layout_width="200dp"
+                    android:id="@+id/cardStoreCode"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
                     app:cardBackgroundColor="@color/white"
                     app:strokeColor="@color/black"
                     app:strokeWidth="1dp"
@@ -52,18 +36,96 @@
                     app:cardElevation="0dp">
 
                     <Spinner
-                        android:id="@+id/spinnerLocation"
+                        android:id="@+id/spinnerStoreCode"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.card.MaterialCardView>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardLocation"
+                        android:layout_width="200dp"
+                        android:layout_height="40dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:strokeColor="@color/black"
+                        app:strokeWidth="1dp"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="0dp">
+
+                        <Spinner
+                            android:id="@+id/spinnerLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <Button
+                        android:id="@+id/btnLocationSave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="Save"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvScanOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:layout_marginTop="-20dp"
+                android:paddingLeft="40dp" />
+
+            <LinearLayout
+                android:id="@+id/llTextInputRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/white"
+                    app:strokeColor="@color/black"
+                    app:strokeWidth="1dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="0dp">
+
+                    <EditText
+                        android:id="@+id/etProductIDCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="5dp"
+                        android:textColor="@color/black"
+                        android:inputType="number"
+                        android:hint="Enter Barcode/ Product code"
+                        android:textSize="15sp"
+                        android:gravity="start|center_vertical"
+                        android:background="@null"
+                        android:imeOptions="actionNext" />
+                </com.google.android.material.card.MaterialCardView>
+
                 <Button
-                    android:id="@+id/btnLocationSave"
+                    android:id="@+id/btnSave"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="-5dp"
                     android:text="Save"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/black"
@@ -72,151 +134,99 @@
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp" />
             </LinearLayout>
-        </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvScanOptions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:layout_marginTop="-20dp"
-            android:paddingLeft="40dp" />
-
-        <LinearLayout
-            android:id="@+id/llTextInputRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="gone">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:cardBackgroundColor="@color/white"
-                app:strokeColor="@color/black"
-                app:strokeWidth="1dp"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="0dp">
-
-                <EditText
-                    android:id="@+id/etProductIDCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:textColor="@color/black"
-                    android:inputType="number"
-                    android:hint="Enter Barcode/ Product code"
-                    android:textSize="15sp"
-                    android:gravity="start|center_vertical"
-                    android:background="@null"
-                    android:imeOptions="actionNext" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="-5dp"
-                android:text="Save"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/black"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp" />
-        </LinearLayout>
-
-        <!-- List header + items -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            <!-- List header + items -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#cccccc">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:backgroundTint="#808080" />
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
+                    android:orientation="vertical"
                     android:background="#cccccc">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="RFID Tags"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:paddingStart="5dp"
-                        android:gravity="center_vertical" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:backgroundTint="#808080" />
 
-                    <!--
-                        Originally commented-out plain label:
-                        <Label Grid.Column="1" Text="Scanned &#10; QTY" ... />
-                        Replaced with FormattedText binding StockTransferScannedQTYTotalCount
-                    -->
-                    <TextView
-                        android:id="@+id/tvHeaderScannedQTY"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:paddingStart="10dp"
-                        android:gravity="center" />
+                        android:orientation="horizontal"
+                        android:padding="5dp"
+                        android:background="#cccccc">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="RFID Tags"
+                            android:textSize="15sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:paddingStart="5dp"
+                            android:gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvHeaderScannedQTY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="15sp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:paddingStart="10dp"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:backgroundTint="#808080" />
                 </LinearLayout>
 
-                <View
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvOutboundItems"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:backgroundTint="#808080" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvOutboundItems"
+            <EditText
+                android:id="@+id/etBarcodeEntry"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
+                android:alpha="0"
+                android:hint="Enter Barcode/ Product code"
+                android:textSize="15sp"
+                android:visibility="gone"
+                android:background="@null" />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/etBarcodeEntry"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="5dp"
-            android:textColor="@color/black"
-            android:alpha="0"
-            android:hint="Enter Barcode/ Product code"
-            android:textSize="15sp"
-            android:visibility="gone"
-            android:background="@null" />
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="180dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:text="Next"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/black"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnNext"
-        android:layout_width="180dp"
-        android:layout_height="55dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        android:text="Next"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/black"
-        android:textStyle="bold"
-        android:textSize="15sp" />
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/layout_loading_overlay"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

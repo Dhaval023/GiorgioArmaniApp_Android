@@ -4,135 +4,126 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DDE0DC"
-    android:padding="24dp">
+    android:background="#DDE0DC">
 
-    <!-- User Name Label -->
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User Name"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#1A1A1A"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tilUsername" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
 
-    <!-- Username Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilUsername"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        app:hintTextColor="#888888"
-        app:boxBackgroundColor="#FFFFFF"
-        app:boxBackgroundMode="outline"
-        app:boxStrokeColor="#AAAAAA"
-        app:boxStrokeWidth="1dp"
-        app:boxCornerRadiusTopStart="6dp"
-        app:boxCornerRadiusTopEnd="6dp"
-        app:boxCornerRadiusBottomStart="6dp"
-        app:boxCornerRadiusBottomEnd="6dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvUsername"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:hintEnabled="false" >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/UsernameEntry"
-            android:layout_width="match_parent"
+        <!-- User Name Label -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textSize="14sp"
-            android:hint="Enter your Username"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:text="User Name"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#1A1A1A"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tilUsername" />
 
-    <!-- Password Label -->
-    <TextView
-        android:id="@+id/tvPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#1A1A1A"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/tilUsername"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tilPassword" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:hintTextColor="#888888"
-        app:boxBackgroundColor="#FFFFFF"
-        app:boxBackgroundMode="outline"
-        app:boxStrokeColor="#AAAAAA"
-        app:boxStrokeWidth="1dp"
-        app:boxCornerRadiusTopStart="6dp"
-        app:boxCornerRadiusTopEnd="6dp"
-        app:boxCornerRadiusBottomStart="6dp"
-        app:boxCornerRadiusBottomEnd="6dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tilUsername"
-        app:layout_constraintStart_toEndOf="@id/tvPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:hintEnabled="false">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/PasswordEntry"
-            android:layout_width="match_parent"
+        <!-- Username Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUsername"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textSize="14sp"
-            android:hint="Enter your Password"
-            android:layout_marginLeft="8dp"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:hintTextColor="#888888"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="#AAAAAA"
+            app:boxStrokeWidth="1dp"
+            app:boxCornerRadiusTopStart="6dp"
+            app:boxCornerRadiusTopEnd="6dp"
+            app:boxCornerRadiusBottomStart="6dp"
+            app:boxCornerRadiusBottomEnd="6dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvUsername"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:hintEnabled="false" >
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/LoginButton"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/UsernameEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:hint="Enter your Username"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Password Label -->
+        <TextView
+            android:id="@+id/tvPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#1A1A1A"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/tilUsername"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tilPassword" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:hintTextColor="#888888"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="#AAAAAA"
+            app:boxStrokeWidth="1dp"
+            app:boxCornerRadiusTopStart="6dp"
+            app:boxCornerRadiusTopEnd="6dp"
+            app:boxCornerRadiusBottomStart="6dp"
+            app:boxCornerRadiusBottomEnd="6dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tilUsername"
+            app:layout_constraintStart_toEndOf="@id/tvPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:hintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/PasswordEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textSize="14sp"
+                android:hint="Enter your Password"
+                android:layout_marginLeft="8dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/LoginButton"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:text="LOGIN"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            app:cornerRadius="6dp"
+            android:backgroundTint="#111111"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toBottomOf="@id/tilPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/layout_loading_overlay"
         android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:text="LOGIN"
-        android:textStyle="bold"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        app:cornerRadius="6dp"
-        android:backgroundTint="#111111"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toBottomOf="@id/tilPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-<!--    <View-->
-<!--        android:id="@+id/loadingOverlay"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:background="#80000000"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent" />-->
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp"
-        android:indeterminate="true"
-        android:indeterminateTint="#0000FF"
-        android:visibility="gone"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

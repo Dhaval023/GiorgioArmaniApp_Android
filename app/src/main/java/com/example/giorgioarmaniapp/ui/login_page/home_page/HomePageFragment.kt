@@ -3,7 +3,6 @@ package com.example.giorgioarmaniapp.ui.login_page.home_page
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.view.*
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
@@ -24,7 +23,7 @@ class HomePageFragment : Fragment() {
     private val viewModel: HomePageViewModel by viewModels()
     private lateinit var adapter: HomePageAdapter
 
-    private lateinit var progressBar: ProgressBar
+    private lateinit var loadingOverlay: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,11 +36,10 @@ class HomePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         val txtStoreName = view.findViewById<TextView>(R.id.txtStoreName)
         val txtEmployeeName = view.findViewById<TextView>(R.id.txtEmployeeName)
         val recyclerView = view.findViewById<RecyclerView>(R.id.menuRecyclerView)
-        progressBar = view.findViewById(R.id.progressBar)
+        loadingOverlay = view.findViewById(R.id.loadingLayout)
 
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
@@ -84,8 +82,6 @@ class HomePageFragment : Fragment() {
                     viewModel.onNavigationHandled()
                 }
                 "StockTakeSelectionPage" -> {
-                    // TODO: Implement navigation when the destination is added to mobile_navigation.xml
-                    // findNavController().navigate(R.id.action_homePage_to_stockTakeSelectionPage)
                     viewModel.onNavigationHandled()
                 }
             }
@@ -101,14 +97,17 @@ class HomePageFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_settings -> {
-                        viewModel.navigateToSettingsPage() // triggers _navigateTo = "SettingPage"
+                        viewModel.navigateToSettingsPage()
                         true
                     }
                     else -> false
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
+    private fun setupToolbar() {
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         val originalDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.log_off)
         if (originalDrawable != null) {
             val iconSizePx = (40 * resources.displayMetrics.density).toInt()
@@ -150,7 +149,13 @@ class HomePageFragment : Fragment() {
                 .show()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        setupToolbar()
+    }
+
     private fun showLoading(show: Boolean) {
-        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        loadingOverlay.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

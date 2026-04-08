@@ -21,6 +21,9 @@ class OutboundMainPageViewModel : ViewModel() {
     private val _navigateToSettings = MutableLiveData(false)
     val navigateToSettings: LiveData<Boolean> get() = _navigateToSettings
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     var isBusy: Boolean = false
 
     init {

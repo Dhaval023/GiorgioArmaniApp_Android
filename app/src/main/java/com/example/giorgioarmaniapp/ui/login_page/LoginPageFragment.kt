@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -25,7 +24,7 @@ class LoginPageFragment : Fragment() {
     private lateinit var usernameEntry: TextInputEditText
     private lateinit var passwordEntry: TextInputEditText
     private lateinit var loginButton: MaterialButton
-    private lateinit var progressBar: ProgressBar
+    private lateinit var loadingOverlay: View
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -51,7 +50,7 @@ class LoginPageFragment : Fragment() {
         usernameEntry = view.findViewById(R.id.UsernameEntry)
         passwordEntry = view.findViewById(R.id.PasswordEntry)
         loginButton = view.findViewById(R.id.LoginButton)
-        progressBar = view.findViewById(R.id.progressBar)
+        loadingOverlay = view.findViewById(R.id.loadingLayout)
 
         checkAndRequestPermissions()
 
@@ -113,7 +112,7 @@ class LoginPageFragment : Fragment() {
 
     private fun showLoading(show: Boolean) {
         loginButton.isEnabled = !show
-        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        loadingOverlay.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showAlert(message: String) {

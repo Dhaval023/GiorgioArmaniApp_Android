@@ -11,7 +11,6 @@ import com.google.android.material.appbar.MaterialToolbar
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Handle the splash screen transition before super.onCreate()
         installSplashScreen()
 
         super.onCreate(savedInstanceState)

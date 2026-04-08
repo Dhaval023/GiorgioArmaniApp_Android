@@ -27,7 +27,6 @@ class LoginPageViewModel : ViewModel() {
     val uiState: LiveData<LoginUiState> = _uiState
 
     init {
-        // Mirror C# default power settings init
         if (Settings.inboundRFIDPower == 0) Settings.inboundRFIDPower = 270
         if (Settings.outboundRFIDPower == 0) Settings.outboundRFIDPower = 270
         if (Settings.stockTakeRFIDPower == 0) Settings.stockTakeRFIDPower = 270

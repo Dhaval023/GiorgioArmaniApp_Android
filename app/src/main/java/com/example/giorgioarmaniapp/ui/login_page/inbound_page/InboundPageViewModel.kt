@@ -133,6 +133,9 @@ class InboundPageViewModel : ViewModel() {
     private val _navigateToSettings = MutableLiveData(false)
     val navigateToSettings: LiveData<Boolean> get() = _navigateToSettings
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     init {
         // Code added by Mitesh on 16/05/2023.
         // Dict was holding the old tag data due to which the same tags are not being read,
@@ -559,9 +562,11 @@ class InboundPageViewModel : ViewModel() {
                     itemList = _newAllItems.value?.toList() ?: emptyList()
                 )
 
+                _isLoading.value = true
                 withContext(Dispatchers.IO) {
                     val response = Settings.service.submitInboundList(userId, tempList)
                     withContext(Dispatchers.Main) {
+                        _isLoading.value = false
                         if (response?.success == "Successfully Submitted") {
                             _submitSuccess.value = true
                             _newAllItems.value = mutableListOf()
@@ -569,6 +574,7 @@ class InboundPageViewModel : ViewModel() {
                     }
                 }
             } catch (ex: Exception) {
+                _isLoading.value = false
             }
         }
     }

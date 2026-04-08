@@ -222,7 +222,6 @@ class ReaderModel private constructor(context: Context) :
     @Synchronized
     fun performInventory(): Boolean {
         return try {
-            rfidReader?.reinitTransport()
             rfidReader?.Actions?.Inventory?.perform()
             true
         } catch (e: InvalidUsageException) {

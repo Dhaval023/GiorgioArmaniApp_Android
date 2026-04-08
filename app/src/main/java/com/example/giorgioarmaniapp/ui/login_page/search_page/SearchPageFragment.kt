@@ -3,12 +3,14 @@ package com.example.giorgioarmaniapp.ui.login_page.search_page
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.giorgioarmaniapp.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -19,103 +21,116 @@ class SearchPageFragment : Fragment() {
 
     private val viewModel: SearchPageViewModel by viewModels()
 
-    private lateinit var tagPatternEntry: TextInputEditText
+    private lateinit var tagInput: TextInputEditText
     private lateinit var btnSave: MaterialButton
-    private lateinit var tvRelativeDistance: TextView
-    private lateinit var blackFillBar: View
+    private lateinit var tvDistance: TextView
+    private lateinit var fillBar: View
+    private lateinit var loadingOverlay: View
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_search_page, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+        tagInput = view.findViewById(R.id.tagPatternEntry)
+        btnSave = view.findViewById(R.id.btnSave)
+        tvDistance = view.findViewById(R.id.tvRelativeDistance)
+        fillBar = view.findViewById(R.id.blackFillBar)
+        loadingOverlay = view.findViewById(R.id.loadingLayout)
+
+        viewModel.isEnabledTextGTIN.observe(viewLifecycleOwner) {
+            tagInput.isEnabled = it
+            btnSave.isEnabled = it
         }
 
-        tagPatternEntry    = view.findViewById(R.id.tagPatternEntry)
-        btnSave            = view.findViewById(R.id.btnSave)
-        tvRelativeDistance = view.findViewById(R.id.tvRelativeDistance)
-        blackFillBar       = view.findViewById(R.id.blackFillBar)
-
-        // Mirrors IsEnabled binding
-        viewModel.isEnabledTextGTIN.observe(viewLifecycleOwner) { isEnabled ->
-            tagPatternEntry.isEnabled = isEnabled
+        viewModel.relativeDistance.observe(viewLifecycleOwner) {
+            tvDistance.text = it
         }
 
-        // Mirrors RelativeDistance label
-        viewModel.relativeDistance.observe(viewLifecycleOwner) { distance ->
-            tvRelativeDistance.text = distance
+        viewModel.distanceBoxHeight.observe(viewLifecycleOwner) {
+            val px = (it * resources.displayMetrics.density).toInt()
+            fillBar.layoutParams.height = px
+            fillBar.requestLayout()
         }
 
-        // Mirrors DistanceBox binding
-        viewModel.distanceBoxHeight.observe(viewLifecycleOwner) { heightDp ->
-            val heightPx = (heightDp * resources.displayMetrics.density).toInt()
-            val params = blackFillBar.layoutParams
-            params.height = heightPx
-            blackFillBar.layoutParams = params
-        }
-
-        // Mirrors DisplayAlert("Alert", ...)
-        viewModel.alertEvent.observe(viewLifecycleOwner) { message ->
-            message ?: return@observe
+        viewModel.alertEvent.observe(viewLifecycleOwner) {
+            it ?: return@observe
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage(message)
-                .setNegativeButton("Cancel", null)
+                .setMessage(it)
+                .setPositiveButton("OK", null)
                 .show()
             viewModel.onAlertHandled()
         }
 
-        // Mirrors DisplayAlert("Search", "Are you sure...")
-        viewModel.confirmEvent.observe(viewLifecycleOwner) { event ->
-            event ?: return@observe
+        viewModel.confirmEvent.observe(viewLifecycleOwner) {
+            it ?: return@observe
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Search")
-                .setMessage(event.first)
-                .setPositiveButton("Yes") { _, _ ->
-                    viewModel.onSearchConfirmed() // wires updateIn + disables entry
-                    viewModel.onConfirmHandled()
-                }
-                .setNegativeButton("No") { _, _ ->
-                    viewModel.onConfirmHandled()
-                }
+                .setMessage(it.first)
+                .setPositiveButton("Yes") { _, _ -> viewModel.onSearchConfirmed() }
+                .setNegativeButton("No", null)
                 .show()
+            viewModel.onConfirmHandled()
         }
 
-        // Mirrors TextChanged="Handle_TextChanged"
-        tagPatternEntry.addTextChangedListener(object : TextWatcher {
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
+            if (navigate == true) {
+                viewModel.onNavigateToSettingsHandled()
+                findNavController().navigate(R.id.nav_passcode)
+            }
+        }
+
+        tagInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.textGTINValue = s?.toString() ?: ""
+                viewModel.textGTINValue = s.toString()
             }
-            override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Mirrors SaveCommand
         btnSave.setOnClickListener {
             viewModel.searchTag()
         }
     }
 
-    // Mirrors OnAppearing() — NOT calling updateIn here, only after search confirmed
+    private fun setupToolbar() {
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.home_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_settings -> {
+                        viewModel.navigateToSettingsPage()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
     override fun onResume() {
         super.onResume()
-        // Ensure we are listening if a search was already in progress
-        if (!viewModel.isEnabledTextGTIN.value!!) {
+        setupToolbar()
+        if (viewModel.isEnabledTextGTIN.value == false) {
             viewModel.updateIn()
         }
     }
 
-    // Mirrors OnDisappearing()
     override fun onPause() {
         super.onPause()
         viewModel.updateOut()

@@ -14,9 +14,12 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +39,7 @@ class InboundPageFragment : Fragment() {
     // Adapters — declared as lateinit; assigned in setup functions
     private lateinit var scanOptionAdapter: ScanOptionAdapter
     private lateinit var inboundItemAdapter: InboundItemAdapter
+    private lateinit var loadingOverlay: View
 
     // Holds the delivery data passed to this screen.
     // Originally: InboundPage(InboundPendingListResult arg)
@@ -44,8 +48,6 @@ class InboundPageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        @Suppress("DEPRECATION")
-        setHasOptionsMenu(true) // enables toolbar menu (Settings icon)
 
         // Retrieve argument — equivalent of constructor parameter `InboundPendingListResult arg`
         arguments?.let { args ->
@@ -72,20 +74,13 @@ class InboundPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
-
+        loadingOverlay = view.findViewById(R.id.loadingLayout)
         viewModel.updateBarcodeOut()
         hideKeyboard()
 
         if (pendingInboundData != null) {
             viewModel.pendingInboundData = pendingInboundData
         }
-
-        toolbar.title = viewModel.pendingInboundData?.deliveryNumber ?: "Inbound Detail"
 
         setupScanOptions(view)
         setupInboundList(view)
@@ -109,6 +104,7 @@ class InboundPageFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         try {
+            setupToolbar()
             viewModel.updateIn()
             viewModel.updateBarcodeIn()
             viewModel.inboundScanTotalCount()
@@ -140,20 +136,31 @@ class InboundPageFragment : Fragment() {
         hideKeyboard()
     }
 
-    @Suppress("DEPRECATION")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                viewModel.navigateToSettingsPage()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    private fun setupToolbar() {
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+        toolbar.title = viewModel.pendingInboundData?.deliveryNumber ?: "Inbound Detail"
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.home_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_settings -> {
+                        viewModel.navigateToSettingsPage()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setupScanOptions(view: View) {
@@ -314,6 +321,10 @@ class InboundPageFragment : Fragment() {
             val barcodeEntry = view.findViewById<EditText>(R.id.etBarcodeEntry)
             barcodeEntry.visibility = if (visible) View.VISIBLE else View.GONE
             if (visible) barcodeEntry.requestFocus()
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
     private fun hideKeyboard() {

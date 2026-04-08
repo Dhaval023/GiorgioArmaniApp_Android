@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Converted from Xamarin DataTemplate inside OutBoundListView CollectionView:
-        Grid 2 columns:
-            Col 0: Label GlobalTradeItemNumber  textColor=Black  padding=5,0,0,0
-            Col 1: Label ScannedQTY             textColor=Black  padding=10,0,0,0
-        SwipeView.RightItems:
-            Red close icon → DeleteTagCommand (IsDelTag == true)
--->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -24,7 +16,8 @@
         android:layout_weight="1.5"
         android:textSize="14sp"
         android:textColor="@android:color/black"
-        android:paddingStart="5dp" />
+        android:paddingStart="5dp"
+        android:gravity="center_vertical" />
 
     <TextView
         android:id="@+id/tvScannedQTY"
@@ -33,6 +26,7 @@
         android:layout_weight="1"
         android:textSize="14sp"
         android:textColor="@android:color/black"
-        android:paddingStart="10dp" />
+        android:paddingStart="10dp"
+        android:gravity="center" />
 
 </LinearLayout>

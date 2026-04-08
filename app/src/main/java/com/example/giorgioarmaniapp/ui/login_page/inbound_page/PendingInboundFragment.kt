@@ -21,16 +21,23 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
 
     private val viewModel: PendingInboundViewModel by viewModels()
     private lateinit var adapter: PendingInboundAdapter
+    private lateinit var loadingOverlay: View
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar()
+        loadingOverlay = view.findViewById(R.id.loadingLayout)
         setupRecyclerView(view)
         setupSearch(view)
         observeData(view)
 
         loadData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.inboundSearchText.value = ""
+        setupToolbar()
     }
 
     private fun setupToolbar() {
@@ -97,21 +104,19 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
                 if (it) View.VISIBLE else View.GONE
         }
 
-        // 🔥 LOADER (optional)
+        // 🔥 LOADER
         viewModel.isLoading.observe(viewLifecycleOwner) {
-            view.findViewById<View>(R.id.progressBar)?.visibility =
-                if (it) View.VISIBLE else View.GONE
+            showLoading(it)
         }
+    }
+
+    private fun showLoading(show: Boolean) {
+        loadingOverlay.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun loadData() {
         val storeCode = Settings.storeId
         viewModel.loadInboundList(storeCode)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.inboundSearchText.value = ""
     }
 
     override fun onDestroyView() {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,7 +20,7 @@ class PasscodeFragment : DialogFragment() {
     private lateinit var passcodeEntry: TextInputEditText
     private lateinit var btnOk: MaterialButton
     private lateinit var btnCancel: MaterialButton
-    private lateinit var progressBar: ProgressBar
+    private lateinit var loadingOverlay: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +36,7 @@ class PasscodeFragment : DialogFragment() {
         passcodeEntry = view.findViewById(R.id.PasscodeEntry)
         btnOk         = view.findViewById(R.id.btnOk)
         btnCancel     = view.findViewById(R.id.btnCancel)
-        progressBar   = view.findViewById(R.id.progressBar)
+        loadingOverlay = view.findViewById(R.id.loadingLayout)
 
         // Mirrors CloseCommand
         btnCancel.setOnClickListener {
@@ -50,7 +49,7 @@ class PasscodeFragment : DialogFragment() {
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
             btnOk.isEnabled     = !isLoading
             btnCancel.isEnabled = !isLoading
         }

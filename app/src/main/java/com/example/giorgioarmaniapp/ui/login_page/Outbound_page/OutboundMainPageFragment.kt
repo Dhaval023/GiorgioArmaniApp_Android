@@ -1,14 +1,12 @@
 package com.example.giorgioarmaniapp.ui.login_page.Outbound_page
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,12 +19,11 @@ class OutboundMainPageFragment : Fragment() {
     private val viewModel: OutboundMainPageViewModel by viewModels()
 
     private lateinit var menuAdapter: OutboundMenuAdapter
+    private lateinit var loadingOverlay: View
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        @Suppress("DEPRECATION")
-        setHasOptionsMenu(true) // enable toolbar settings icon
     }
 
     override fun onCreateView(
@@ -40,9 +37,27 @@ class OutboundMainPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar()
+        loadingOverlay = view.findViewById(R.id.loadingLayout)
         setupMenuList(view)
         observeViewModel()
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.menu_outbound_main, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_settings -> {
+                        viewModel.navigateToSettingsPage()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setupToolbar() {
@@ -55,6 +70,7 @@ class OutboundMainPageFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        setupToolbar()
         try {
             viewModel.stopReadingMode()
         } catch (ex: Exception) {
@@ -62,28 +78,10 @@ class OutboundMainPageFragment : Fragment() {
         }
     }
 
-    @Suppress("DEPRECATION")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_outbound_main, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                // Originally: SettingCommand → NavigateToSettingsPage()
-                viewModel.navigateToSettingsPage()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun setupMenuList(view: View) {
         val rvMenu = view.findViewById<RecyclerView>(R.id.rvOutboundMenuItems)
 
         menuAdapter = OutboundMenuAdapter { model ->
-            // Originally: OutboundMenuItemTapCommand with CommandParameter={Binding .}
             viewModel.outboundMenuItemTap(model)
         }
 
@@ -108,8 +106,6 @@ class OutboundMainPageFragment : Fragment() {
                     findNavController().navigate(R.id.action_outboundMainPage_to_stockTransfer)
                 }
                 OutboundMenuEnums.CONSOLIDATEDSTOCKTRANSFER -> {
-                    // Originally: await App.Current.MainPage.Navigation.PushAsync(new ConsolidatedStockTransferPage())
-                    // findNavController().navigate(R.id.action_outboundMainPage_to_consolidatedStockTransferPage)
                 }
             }
         }
@@ -119,6 +115,10 @@ class OutboundMainPageFragment : Fragment() {
                 viewModel.onNavigateToSettingsHandled()
                 findNavController().navigate(R.id.nav_passcode)
             }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 }
