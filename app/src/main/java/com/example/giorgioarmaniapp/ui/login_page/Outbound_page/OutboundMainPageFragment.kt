@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giorgioarmaniapp.R
 import com.example.giorgioarmaniapp.models.enums.OutboundMenuEnums
+import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
 
 class OutboundMainPageFragment : Fragment() {
@@ -40,7 +41,18 @@ class OutboundMainPageFragment : Fragment() {
         loadingOverlay = view.findViewById(R.id.loadingLayout)
         setupMenuList(view)
         observeViewModel()
+        setupMenu()
+    }
 
+    private fun setupToolbar() {
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun setupMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -58,14 +70,6 @@ class OutboundMainPageFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    private fun setupToolbar() {
-        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     override fun onResume() {
@@ -106,6 +110,7 @@ class OutboundMainPageFragment : Fragment() {
                     findNavController().navigate(R.id.action_outboundMainPage_to_stockTransfer)
                 }
                 OutboundMenuEnums.CONSOLIDATEDSTOCKTRANSFER -> {
+                    findNavController().navigate(R.id.action_outboundMainPage_to_consolidatedStockTransfer)
                 }
             }
         }
@@ -113,7 +118,7 @@ class OutboundMainPageFragment : Fragment() {
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
             if (navigate == true) {
                 viewModel.onNavigateToSettingsHandled()
-                findNavController().navigate(R.id.nav_passcode)
+                PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
             }
         }
 

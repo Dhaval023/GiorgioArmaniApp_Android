@@ -1,6 +1,5 @@
 package com.example.giorgioarmaniapp.ui.login_page.popup
 
-import com.example.giorgioarmaniapp.ui.login_page.home_page.HomePageFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -67,10 +66,11 @@ class PasscodeFragment : DialogFragment() {
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { success ->
             if (success) {
                 dismiss()
-                parentFragmentManager.let {
-                    (parentFragment as? HomePageFragment)
-                        ?.findNavController()
-                        ?.navigate(R.id.action_homePage_to_settingPage)
+                // Using findNavController() to navigate to settings from anywhere
+                try {
+                    findNavController().navigate(R.id.nav_setting)
+                } catch (e: Exception) {
+                    // Fallback or log if needed
                 }
                 viewModel.onNavigateHandled()
             }

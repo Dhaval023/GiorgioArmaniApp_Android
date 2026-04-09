@@ -233,9 +233,6 @@ class OutboundStockTransferPageViewModel : ViewModel() {
                 val currentlySelected = currentOptions.find { it.isSelected }
 
                 if (currentlySelected?.id != model.id) {
-                    synchronized(tagReadLock) { tagListDict.clear() }
-                    _allOutboundItems.value = mutableListOf()
-                    _stockTransferScannedQTYTotalCount.value = 0
                     _productIDCode.value = ""
 
                     val updatedList = currentOptions.map { s ->

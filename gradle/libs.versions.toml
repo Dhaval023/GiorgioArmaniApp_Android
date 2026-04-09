@@ -16,6 +16,7 @@ zebraScanner = "2.7.0.0"
 coreSplashscreen = "1.0.1"
 gamesActivity = "4.4.0"
 impress = "0.0.12"
+lifecycleViewmodelAndroid = "2.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +34,7 @@ zebra-scanner = { group = "com.zebra.scannercontrol", name = "scanner-sdk-androi
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-games-activity = { group = "androidx.games", name = "games-activity", version.ref = "gamesActivity" }
 impress = { group = "com.google.ar", name = "impress", version.ref = "impress" }
+androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

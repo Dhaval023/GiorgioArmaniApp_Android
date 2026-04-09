@@ -28,6 +28,7 @@ import com.example.giorgioarmaniapp.helper.base.Settings
 import com.example.giorgioarmaniapp.models.InboundPendingListModel
 import com.example.giorgioarmaniapp.models.statics.ScanOptionModel
 import com.example.giorgioarmaniapp.ui.login_page.BaseViewModel
+import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zebra.rfid.api3.Antennas
@@ -42,14 +43,13 @@ class InboundPageFragment : Fragment() {
     private lateinit var loadingOverlay: View
 
     // Holds the delivery data passed to this screen.
-    // Originally: InboundPage(InboundPendingListResult arg)
     private var pendingInboundData: InboundPendingListModel.InboundPendingListResult? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Retrieve argument — equivalent of constructor parameter `InboundPendingListResult arg`
+        // Retrieve argument
         arguments?.let { args ->
             pendingInboundData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 args.getParcelable(
@@ -96,11 +96,9 @@ class InboundPageFragment : Fragment() {
         viewModel.activeOnFocus = { focusBarcodeEntry(view) }
 
         hideKeyboard()
+        setupMenu()
     }
 
-    /**
-     * Converted from: protected override void OnAppearing()
-     */
     override fun onResume() {
         super.onResume()
         try {
@@ -130,9 +128,6 @@ class InboundPageFragment : Fragment() {
         super.onPause()
         viewModel.updateOut()
         viewModel.updateBarcodeOut()
-
-        // Changes done by Mitesh on 16/05/2023 to fix bug DB00011
-        // viewModel.newAllItems.value?.clear()
         hideKeyboard()
     }
 
@@ -140,10 +135,11 @@ class InboundPageFragment : Fragment() {
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
         toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+            findNavController().popBackStack()
         }
-        toolbar.title = viewModel.pendingInboundData?.deliveryNumber ?: "Inbound Detail"
+    }
 
+    private fun setupMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -166,7 +162,6 @@ class InboundPageFragment : Fragment() {
     private fun setupScanOptions(view: View) {
         val rvScanOptions = view.findViewById<RecyclerView>(R.id.rvScanOptions)
         scanOptionAdapter = ScanOptionAdapter { model: ScanOptionModel ->
-            // Originally: Command="{Binding ChangeScanOptionsCommand}" + TapGestureRecognizer
             viewModel.scanOptionSetting(model)
         }
         rvScanOptions.layoutManager =
@@ -182,7 +177,6 @@ class InboundPageFragment : Fragment() {
         val rvItems = view.findViewById<RecyclerView>(R.id.rvInboundItems)
         inboundItemAdapter = InboundItemAdapter(
             onDelete = { item: InboundPendingListModel.InboundPendingModel ->
-                // Originally: DeleteTagCommand → shows confirmation dialog, then deletes
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Warning")
                     .setMessage("Are you sure you want to Remove this from List?")
@@ -191,7 +185,6 @@ class InboundPageFragment : Fragment() {
                     .show()
             },
             onMakeEqual = { item: InboundPendingListModel.InboundPendingModel ->
-                // Originally: MakeEqualCountTagCommand
                 viewModel.makeEqualQTYTag(item)
             }
         )
@@ -216,32 +209,19 @@ class InboundPageFragment : Fragment() {
             viewModel.productIDCode = it?.toString() ?: ""
         }
 
-        // Originally: Command="{Binding AddInboundItemCommand}"
         btnSave.setOnClickListener {
             viewModel.addInboundItem()
         }
     }
 
-    /**
-     * Sets up the hidden barcode entry field.
-     * Equivalent of:
-     *   XBarcodeEntry x:Name="bentry" IsVisible="false"
-     *   Text="{Binding BarcodeOrProductcode}"
-     *   Unfocused="bentry_Unfocused"
-     *   Focused="bentry_Focused"
-     */
     private fun setupBarcodeEntry(view: View) {
         val barcodeEntry = view.findViewById<EditText>(R.id.etBarcodeEntry)
 
         barcodeEntry.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                // Originally: void bentry_Focused(...)
-                // Hides keyboard, keeps focus, clears keyboard type
                 hideKeyboard()
                 barcodeEntry.requestFocus()
             } else {
-                // Originally: void bentry_Unfocused(...)
-                // If barcode mode is active, re-focus to keep scanner ready
                 hideKeyboard()
                 if (viewModel.isBarcodeViewVisible.value == true) {
                     barcodeEntry.requestFocus()
@@ -253,25 +233,16 @@ class InboundPageFragment : Fragment() {
         barcodeEntry.addTextChangedListener { text ->
             val value = text?.toString() ?: ""
             if (value.isNotEmpty()) {
-                // Triggers addBarcodes() via the barcodeOrProductcode property setter
                 viewModel.barcodeOrProductcode = value
             }
         }
     }
 
-    /**
-     * Sets up the Submit button at the bottom.
-     * Equivalent of: Button Text="Submit" Command="{Binding SaveCommand}"
-     */
     private fun setupSubmitButton(view: View) {
         view.findViewById<Button>(R.id.btnSubmit).setOnClickListener {
             viewModel.saveListData()
         }
     }
-
-    // endregion
-
-    // region --- Observers ---
 
     private fun observeViewModel(view: View) {
         viewModel.inboundExpectedQTYTotalCount.observe(viewLifecycleOwner) { count ->
@@ -284,7 +255,7 @@ class InboundPageFragment : Fragment() {
                 "Scanned\nQTY\n[$count]"
         }
 
-        // Alert dialogs — replaces Xamarin DisplayAlert("Warning", ..., "Cancel")
+        // Alert dialogs
         viewModel.alertMessage.observe(viewLifecycleOwner) { message ->
             if (!message.isNullOrEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
@@ -309,11 +280,10 @@ class InboundPageFragment : Fragment() {
         }
 
         // Navigate to settings (PasscodePopup)
-        // Originally: await App.Current.MainPage.Navigation.PushAsync(new PasscodePopup())
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
             if (navigate == true) {
                 viewModel.onNavigateToSettingsHandled()
-                findNavController().navigate(R.id.action_inboundPage_to_passcodePopup)
+                PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
             }
         }
 
@@ -336,8 +306,6 @@ class InboundPageFragment : Fragment() {
         view.findViewById<EditText>(R.id.etBarcodeEntry)?.requestFocus()
         hideKeyboard()
     }
-
-    // endregion
 
     companion object {
         const val ARG_PENDING_INBOUND_DATA = "pendingInboundData"

@@ -66,7 +66,7 @@ class HomePageFragment : Fragment() {
             destination ?: return@observe
             when (destination) {
                 "PasscodePopup" -> {
-                    PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
+                    findNavController().navigate(R.id.nav_passcode)
                     viewModel.onNavigationHandled()
                 }
                 "SearchPage" -> {
@@ -82,6 +82,7 @@ class HomePageFragment : Fragment() {
                     viewModel.onNavigationHandled()
                 }
                 "StockTakeSelectionPage" -> {
+                    findNavController().navigate(R.id.action_homePage_to_stockTakeSelection)
                     viewModel.onNavigationHandled()
                 }
             }

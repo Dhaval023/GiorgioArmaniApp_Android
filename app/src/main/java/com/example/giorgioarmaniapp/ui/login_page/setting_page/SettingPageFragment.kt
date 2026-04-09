@@ -36,12 +36,6 @@ class SettingPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
-
         inboundEntry    = view.findViewById(R.id.InboundEntry)
         outboundEntry   = view.findViewById(R.id.OutboundEntry)
         stocktakeEntry  = view.findViewById(R.id.StocktakeEntry)

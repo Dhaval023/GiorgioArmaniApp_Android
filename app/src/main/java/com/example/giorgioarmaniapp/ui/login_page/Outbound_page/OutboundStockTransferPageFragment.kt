@@ -31,6 +31,7 @@ import com.example.giorgioarmaniapp.helper.base.Settings
 import com.example.giorgioarmaniapp.models.statics.ScanOptionModel
 import com.example.giorgioarmaniapp.ui.login_page.BaseViewModel
 import com.example.giorgioarmaniapp.ui.login_page.inbound_page.ScanOptionAdapter
+import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zebra.rfid.api3.Antennas
@@ -78,6 +79,18 @@ class OutboundStockTransferPageFragment : Fragment() {
         focusBarcodeEntry(view)
         viewModel.activeOnFocus = { focusBarcodeEntry(view) }
 
+        setupMenu()
+    }
+
+    private fun setupToolbar() {
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun setupMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -95,14 +108,6 @@ class OutboundStockTransferPageFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    private fun setupToolbar() {
-        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     override fun onResume() {
@@ -325,7 +330,7 @@ class OutboundStockTransferPageFragment : Fragment() {
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
             if (navigate == true) {
                 viewModel.onNavigateToSettingsHandled()
-                findNavController().navigate(R.id.nav_passcode)
+                PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
             }
         }
 

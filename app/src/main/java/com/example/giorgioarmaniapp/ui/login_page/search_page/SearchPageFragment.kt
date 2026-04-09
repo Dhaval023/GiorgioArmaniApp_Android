@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.giorgioarmaniapp.R
+import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -80,7 +81,7 @@ class SearchPageFragment : Fragment() {
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
             if (navigate == true) {
                 viewModel.onNavigateToSettingsHandled()
-                findNavController().navigate(R.id.nav_passcode)
+                PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
             }
         }
 
@@ -95,6 +96,8 @@ class SearchPageFragment : Fragment() {
         btnSave.setOnClickListener {
             viewModel.searchTag()
         }
+
+        setupMenu()
     }
 
     private fun setupToolbar() {
@@ -103,7 +106,9 @@ class SearchPageFragment : Fragment() {
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+    }
 
+    private fun setupMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

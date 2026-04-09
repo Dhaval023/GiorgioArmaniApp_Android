@@ -3,6 +3,7 @@ package com.example.giorgioarmaniapp.models
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 class OutBoundStockModel {
 
@@ -26,13 +27,13 @@ class OutBoundStockModel {
 
         @SerializedName("IsInvalidCount")
         val isInvalidCount: Boolean = false
-    ) : Parcelable
+    ) : Parcelable, Serializable
 
     // --- OutboundPendingListResult ---
     data class OutboundPendingListResult(
         @SerializedName("ItemList")
         val itemList: List<OutBoundStockListModel>?
-    )
+    ) : Serializable
 
     // --- Submit Response ---
     data class ResponseSubmitOutBoundListModel(
@@ -42,7 +43,7 @@ class OutBoundStockModel {
         val error: String?,
         @SerializedName("SUCCESS")
         val success: String?
-    )
+    ) : Serializable
 
     // --- Store List ---
     @Parcelize
@@ -55,7 +56,7 @@ class OutBoundStockModel {
         val locationList: List<LocationList>?,
         @SerializedName("StoreFullName")
         val storeFullName: String?
-    ) : Parcelable
+    ) : Parcelable, Serializable
 
     @Parcelize
     data class LocationList(
@@ -63,7 +64,7 @@ class OutBoundStockModel {
         val id: Int,
         @SerializedName("location_name")
         val locationName: String?
-    ) : Parcelable
+    ) : Parcelable, Serializable
 
     data class ResponseOutBoundStockListModel(
         @SerializedName("results")
@@ -72,7 +73,7 @@ class OutBoundStockModel {
         val error: String?,
         @SerializedName("SUCCESS")
         val success: String?
-    )
+    ) : Serializable
 
 
     data class PendingOutboundResult(
@@ -84,7 +85,7 @@ class OutBoundStockModel {
 
         @SerializedName("ItemList")
         val itemList: List<OutBoundStockListModel>?
-    )
+    ) : Serializable
 
     data class ResponseforPendingOutBoundStockListModel(
         @SerializedName("results")
@@ -95,14 +96,14 @@ class OutBoundStockModel {
 
         @SerializedName("SUCCESS")
         val success: String?
-    )
+    ) : Serializable
 
     // --- SAP Models ---
     @Parcelize
     data class D(
         @SerializedName("results")
         val results: List<Result>?
-    ) : Parcelable
+    ) : Parcelable, Serializable
 
     @Parcelize
     data class Metadata(
@@ -112,7 +113,7 @@ class OutBoundStockModel {
         val uri: String?,
         @SerializedName("type")
         val type: String?
-    ) : Parcelable
+    ) : Parcelable, Serializable
 
     @Parcelize
     data class Result(
@@ -142,7 +143,7 @@ class OutBoundStockModel {
         val materialNumber: String?,
         @SerializedName("GTINCode")
         val gtinCode: String?,
-        @SerializedName("GTINQuantity")
+        @SerializedName("GTINCode")
         val gtinQuantity: String?,
         @SerializedName("Brand")
         val brand: String?,
@@ -152,13 +153,13 @@ class OutBoundStockModel {
         val category: String?,
         @SerializedName("ProductCode")
         val productCode: String?
-    ) : Parcelable
+    ) : Parcelable, Serializable
 
     @Parcelize
     data class Root(
         @SerializedName("d")
         val d: D?
-    ) : Parcelable
+    ) : Parcelable, Serializable
 
     @Parcelize
     data class OutboundPreviewNavArgs(
@@ -166,5 +167,5 @@ class OutBoundStockModel {
         val sohResult: Root,
         val toStoreCode: String,
         val locationId: Int
-    ) : Parcelable
+    ) : Parcelable, Serializable
 }

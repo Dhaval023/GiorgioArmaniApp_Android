@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giorgioarmaniapp.R
 import com.example.giorgioarmaniapp.helper.base.Settings
+import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
 
 class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
@@ -30,6 +31,7 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
         setupRecyclerView(view)
         setupSearch(view)
         observeData(view)
+        setupMenu()
 
         loadData()
     }
@@ -42,12 +44,13 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
 
     private fun setupToolbar() {
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-
         toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+    }
 
+    private fun setupMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -58,7 +61,7 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_settings -> {
-                        findNavController().navigate(R.id.action_pendingInbound_to_passcode)
+                        PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
                         true
                     }
                     else -> false
@@ -121,6 +124,5 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // No need to clear adapter list here if we want to preserve state on back navigation
     }
 }

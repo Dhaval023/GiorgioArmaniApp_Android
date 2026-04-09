@@ -42,6 +42,14 @@
             android:id="@+id/action_homePage_to_outboundMainPage"
             app:destination="@id/nav_outbound_main" />
 
+        <action
+            android:id="@+id/action_homePage_to_stockTakeSelection"
+            app:destination="@id/nav_stock_take_selection" />
+
+        <action
+            android:id="@+id/action_homePage_to_consolidatedStockTransfer"
+            app:destination="@id/nav_consolidated_stock_transfer" />
+
     </fragment>
 
     <fragment
@@ -94,6 +102,9 @@
         <action
             android:id="@+id/action_outboundMainPage_to_stockTransfer"
             app:destination="@id/nav_stock_transfer" />
+        <action
+            android:id="@+id/action_outboundMainPage_to_consolidatedStockTransfer"
+            app:destination="@id/nav_consolidated_stock_transfer" />
     </fragment>
 
     <fragment
@@ -103,6 +114,35 @@
         tools:layout="@layout/fragment_outbound_stocktransfer_page">
         <action
             android:id="@+id/action_stockTransfer_to_passcode"
+            app:destination="@id/nav_passcode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_stock_take_selection"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.stocktake_page.StockTakeSelectionFragment"
+        android:label="Stock Take Selection"
+        tools:layout="@layout/fragment_stock_take_selection">
+        <action
+            android:id="@+id/action_stockTakeSelection_to_stockTakePage"
+            app:destination="@id/nav_stock_take_page" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_stock_take_page"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.stocktake_page.StockTakePageFragment"
+        android:label="Stock Take"
+        tools:layout="@layout/fragment_stock_take_page" />
+
+    <fragment
+        android:id="@+id/nav_consolidated_stock_transfer"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.consolidateStockTransfer_page.ConsolidatedStockTransferFragment"
+        android:label="Pending OutBound List"
+        tools:layout="@layout/fragment_consolidated_stock_transfer">
+        <action
+            android:id="@+id/action_consolidated_to_job"
+            app:destination="@id/nav_stock_transfer" />
+        <action
+            android:id="@+id/action_to_passcode"
             app:destination="@id/nav_passcode" />
     </fragment>
 

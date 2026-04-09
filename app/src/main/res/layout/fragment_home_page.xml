@@ -63,7 +63,7 @@
                 android:id="@+id/txtEmployeeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dhaval Xamarin"
+                android:text="Dhaval "
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"/>
         </LinearLayout>
