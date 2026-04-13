@@ -13,19 +13,14 @@ class SettingPageViewModel : ViewModel() {
 
     private val _inboundPower = MutableLiveData<String>()
     val inboundPower: LiveData<String> = _inboundPower
-
     private val _outboundPower = MutableLiveData<String>()
     val outboundPower: LiveData<String> = _outboundPower
-
     private val _stocktakePower = MutableLiveData<String>()
     val stocktakePower: LiveData<String> = _stocktakePower
-
     private val _appVersion = MutableLiveData<String>()
     val appVersion: LiveData<String> = _appVersion
-
     private val _alertEvent = MutableLiveData<Pair<String, String>?>()
     val alertEvent: LiveData<Pair<String, String>?> = _alertEvent
-
     private val _confirmEvent = MutableLiveData<Pair<String, String>?>()
     val confirmEvent: LiveData<Pair<String, String>?> = _confirmEvent
 

@@ -37,19 +37,16 @@ class InboundPageFragment : Fragment() {
 
     private val viewModel: InboundPageViewModel by viewModels()
 
-    // Adapters — declared as lateinit; assigned in setup functions
     private lateinit var scanOptionAdapter: ScanOptionAdapter
     private lateinit var inboundItemAdapter: InboundItemAdapter
     private lateinit var loadingOverlay: View
 
-    // Holds the delivery data passed to this screen.
     private var pendingInboundData: InboundPendingListModel.InboundPendingListResult? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Retrieve argument
         arguments?.let { args ->
             pendingInboundData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 args.getParcelable(
@@ -89,10 +86,8 @@ class InboundPageFragment : Fragment() {
         setupSubmitButton(view)
         observeViewModel(view)
 
-        // Originally: bentry.Focus()
         focusBarcodeEntry(view)
 
-        // Originally: viewmodel.ActiveOnFocus = ((obj) => { bentry.Focus(); });
         viewModel.activeOnFocus = { focusBarcodeEntry(view) }
 
         hideKeyboard()
@@ -120,7 +115,7 @@ class InboundPageFragment : Fragment() {
             antennaRfConfig.transmitPowerIndex = Settings.inboundRFIDPower
             BaseViewModel.rfidModel.rfidReader!!.Config.Antennas.setAntennaRfConfig(1, antennaRfConfig)
         } catch (ex: Exception) {
-            // silent catch
+
         }
     }
 
@@ -240,7 +235,7 @@ class InboundPageFragment : Fragment() {
 
     private fun setupSubmitButton(view: View) {
         view.findViewById<Button>(R.id.btnSubmit).setOnClickListener {
-            viewModel.saveListData()
+            viewModel.saveListData(requireContext())
         }
     }
 
@@ -255,7 +250,6 @@ class InboundPageFragment : Fragment() {
                 "Scanned\nQTY\n[$count]"
         }
 
-        // Alert dialogs
         viewModel.alertMessage.observe(viewLifecycleOwner) { message ->
             if (!message.isNullOrEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
@@ -279,7 +273,6 @@ class InboundPageFragment : Fragment() {
             }
         }
 
-        // Navigate to settings (PasscodePopup)
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
             if (navigate == true) {
                 viewModel.onNavigateToSettingsHandled()

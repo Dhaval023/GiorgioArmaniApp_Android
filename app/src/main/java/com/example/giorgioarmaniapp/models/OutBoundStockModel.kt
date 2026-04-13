@@ -7,7 +7,6 @@ import java.io.Serializable
 
 class OutBoundStockModel {
 
-    // --- OutBoundStockListModel ---
     @Parcelize
     data class OutBoundStockListModel(
         @SerializedName("GlobalTradeItemNumber")
@@ -29,13 +28,11 @@ class OutBoundStockModel {
         val isInvalidCount: Boolean = false
     ) : Parcelable, Serializable
 
-    // --- OutboundPendingListResult ---
     data class OutboundPendingListResult(
         @SerializedName("ItemList")
         val itemList: List<OutBoundStockListModel>?
     ) : Serializable
 
-    // --- Submit Response ---
     data class ResponseSubmitOutBoundListModel(
         @SerializedName("results")
         val results: List<OutboundPendingListResult>?,
@@ -45,7 +42,6 @@ class OutBoundStockModel {
         val success: String?
     ) : Serializable
 
-    // --- Store List ---
     @Parcelize
     data class STOutBoundStockListModel(
         @SerializedName("StoreCode")
@@ -98,7 +94,6 @@ class OutBoundStockModel {
         val success: String?
     ) : Serializable
 
-    // --- SAP Models ---
     @Parcelize
     data class D(
         @SerializedName("results")

@@ -10,29 +10,21 @@ import com.zebra.rfid.api3.*
 class SearchPageViewModel : ViewModel() {
 
     var textGTINValue: String = ""
-
     private val _tagPattern = MutableLiveData<String?>()
     private val _relativeDistance = MutableLiveData("0")
     val relativeDistance: LiveData<String> = _relativeDistance
-
     private val _distanceBoxHeight = MutableLiveData(0)
     val distanceBoxHeight: LiveData<Int> = _distanceBoxHeight
-
     private val _isEnabledTextGTIN = MutableLiveData(true)
     val isEnabledTextGTIN: LiveData<Boolean> = _isEnabledTextGTIN
-
     private val _alertEvent = MutableLiveData<String?>()
     val alertEvent: LiveData<String?> = _alertEvent
-
     private val _confirmEvent = MutableLiveData<Pair<String, String>?>()
     val confirmEvent: LiveData<Pair<String, String>?> = _confirmEvent
-
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
-
     private val _navigateToSettings = MutableLiveData(false)
     val navigateToSettings: LiveData<Boolean> get() = _navigateToSettings
-
     private var tagFinderStatus = false
     var isBusy: Boolean = false
 
@@ -80,11 +72,9 @@ class SearchPageViewModel : ViewModel() {
     private fun tagReadEvent(tags: Array<TagData>) {
 
         if (!tagFinderStatus) {
-            // 🔍 SCAN MODE
             for (tag in tags) {
                 val tagId = tag.tagID
 
-                // ✅ Flexible matching
                 val match = tagId.contains(textGTINValue, ignoreCase = true)
 
                 if (match) {
@@ -103,7 +93,6 @@ class SearchPageViewModel : ViewModel() {
                 }
             }
         } else {
-            // 📡 LOCATOR MODE
             for (tag in tags) {
                 val dist = tag.LocationInfo?.relativeDistance ?: continue
 
@@ -126,7 +115,7 @@ class SearchPageViewModel : ViewModel() {
                     performInventory()
                 } else {
                     stopInventory()
-                    resetSearch() // ✅ FIX
+                    resetSearch()
                 }
 
             } else {
@@ -146,7 +135,6 @@ class SearchPageViewModel : ViewModel() {
         _relativeDistance.postValue("0")
         _distanceBoxHeight.postValue(0)
 
-        // ✅ enable UI again
         _isEnabledTextGTIN.postValue(true)
     }
 

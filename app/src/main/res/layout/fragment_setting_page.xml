@@ -15,9 +15,6 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <!-- ROW 0: Height 300dp — RFID Power Section -->
-
-            <!-- ROW 1: Auto — App Version Section -->
             <LinearLayout
                 android:id="@+id/rfidPowerSection"
                 android:layout_width="0dp"
@@ -29,39 +26,6 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
-                <!--
-                COMMENTED ORIGINAL SECTION (Slider-based RFID Power):
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="RFID Power"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="0dp" />
-
-                <SeekBar
-                    android:id="@+id/rfidPowerSlider"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:min="0"
-                    android:max="270"
-                    android:thumbTint="@color/black"
-                    android:progressTint="@color/black"
-                    android:progressBackgroundTint="@color/AppGrayColor" />
-
-                <TextView
-                    android:id="@+id/displayLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center_horizontal" />
-                -->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -87,7 +51,6 @@
                         app:columnCount="3"
                         app:rowCount="3">
 
-                        <!-- Inbound Row -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -152,7 +115,6 @@
                             app:layout_gravity="end|center_vertical"
                             app:layout_row="0" />
 
-                        <!-- Outbound Row -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -217,7 +179,6 @@
                             app:layout_gravity="end|center_vertical"
                             app:layout_row="1" />
 
-                        <!-- StockTake Row -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

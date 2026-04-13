@@ -35,7 +35,7 @@ class InboundItemAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
 
-        // Bind columns — originally Grid columns bound to InvalidGTINNumberCLR
+        // originally Grid columns bound to InvalidGTINNumberCLR
         val textColorStr = item.invalidGTINNumberCLR ?: "#000000"
         val textColor = try { Color.parseColor(textColorStr) } catch (e: Exception) { Color.BLACK }
 
@@ -68,7 +68,6 @@ class InboundItemAdapter(
             }
     }
 
-    // region --- Swipe-reveal ItemTouchHelper ---
 
     fun attachSwipeTo(recyclerView: RecyclerView) {
         val callback = object : ItemTouchHelper.SimpleCallback(
@@ -124,5 +123,4 @@ class InboundItemAdapter(
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
     }
 
-    // endregion
 }

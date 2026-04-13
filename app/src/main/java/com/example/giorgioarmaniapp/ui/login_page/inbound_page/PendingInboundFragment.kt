@@ -107,7 +107,6 @@ class PendingInboundFragment : Fragment(R.layout.fragment_pending_inbound) {
                 if (it) View.VISIBLE else View.GONE
         }
 
-        // 🔥 LOADER
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }

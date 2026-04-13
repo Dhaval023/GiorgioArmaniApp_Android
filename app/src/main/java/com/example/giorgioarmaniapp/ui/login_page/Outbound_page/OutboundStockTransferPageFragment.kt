@@ -44,7 +44,6 @@ class OutboundStockTransferPageFragment : Fragment() {
     private lateinit var outboundItemAdapter: StockTransferItemAdapter
     private lateinit var loadingOverlay: View
 
-    // Guard flags: suppress text watchers while programmatically clearing fields
     private var isClearingBarcode = false
     private var isClearingProductCode = false
 
@@ -95,7 +94,7 @@ class OutboundStockTransferPageFragment : Fragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
-                menuInflater.inflate(R.menu.menu_outbound_main, menu)
+                menuInflater.inflate(R.menu.home_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -231,7 +230,6 @@ class OutboundStockTransferPageFragment : Fragment() {
             viewModel.productIDCode = text?.toString() ?: ""
         }
 
-        // Observe LiveData to clear EditText when ViewModel resets productIDCode
         viewModel.productIDCodeLive.observe(viewLifecycleOwner) { code ->
             if (code.isEmpty() && etCode.text.isNotEmpty()) {
                 isClearingProductCode = true

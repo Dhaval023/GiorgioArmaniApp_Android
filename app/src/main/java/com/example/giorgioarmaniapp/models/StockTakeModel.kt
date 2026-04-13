@@ -12,9 +12,9 @@ class StockTakeModel {
         @SerializedName("StyleWhereASNID")
         val styleWhereASNID: String?,
         @SerializedName("SOHQuantity")
-        val sohQuantity: Int,
+        var sohQuantity: Int,
         @SerializedName("ScannedQTY")
-        val scannedQTY: Int,
+        var scannedQTY: Int,
         @SerializedName("IsDelTag")
         val isDelTag: Boolean,
         @SerializedName("InvalidGTINNumberCLR")

@@ -35,7 +35,6 @@ class InboundPendingListModel {
         var isInvalidCount: Boolean
     ) : Parcelable
 
-    // --- InboundPendingListResult ---
     @Parcelize
     data class InboundPendingListResult(
 
@@ -48,11 +47,9 @@ class InboundPendingListModel {
         @SerializedName("ItemList")
         val itemList: List<InboundPendingModel>?,
 
-        // UI state (not from API)
         var isExpander: Boolean = true
     ) : Parcelable
 
-    // --- ResponseInboundPendingList ---
     data class ResponseInboundPendingList(
 
         @SerializedName("results")

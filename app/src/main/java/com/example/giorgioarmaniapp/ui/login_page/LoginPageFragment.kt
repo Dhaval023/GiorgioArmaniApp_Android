@@ -20,7 +20,6 @@ import com.google.android.material.textfield.TextInputEditText
 class LoginPageFragment : Fragment() {
 
     private val viewModel: LoginPageViewModel by viewModels()
-
     private lateinit var usernameEntry: TextInputEditText
     private lateinit var passwordEntry: TextInputEditText
     private lateinit var loginButton: MaterialButton
@@ -68,7 +67,6 @@ class LoginPageFragment : Fragment() {
 
                 is LoginUiState.Success -> {
                     showLoading(false)
-                    // Navigate to HomePage
                     findNavController().navigate(R.id.action_loginPage_to_homePage)
                 }
 

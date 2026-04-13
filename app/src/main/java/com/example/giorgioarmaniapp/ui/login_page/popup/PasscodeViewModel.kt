@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 class PasscodeViewModel : ViewModel() {
 
     private val restService = RestService()
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 

@@ -37,7 +37,6 @@ class PasscodeFragment : DialogFragment() {
         btnCancel     = view.findViewById(R.id.btnCancel)
         loadingOverlay = view.findViewById(R.id.loadingLayout)
 
-        // Mirrors CloseCommand
         btnCancel.setOnClickListener {
             dismiss()
         }
@@ -66,11 +65,9 @@ class PasscodeFragment : DialogFragment() {
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { success ->
             if (success) {
                 dismiss()
-                // Using findNavController() to navigate to settings from anywhere
                 try {
                     findNavController().navigate(R.id.nav_setting)
                 } catch (e: Exception) {
-                    // Fallback or log if needed
                 }
                 viewModel.onNavigateHandled()
             }

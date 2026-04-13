@@ -28,7 +28,6 @@ class ScannerModel private constructor() : IDcsSdkApiDelegate {
         }
     }
 
-    // 🔥 EVENTS (Converted from C# delegates)
     var scannerConnectionEvent: ((String) -> Unit)? = null
     var currentProgress: ((Int) -> Unit)? = null
     var fwVersionEvent: ((String) -> Unit)? = null
@@ -133,7 +132,6 @@ class ScannerModel private constructor() : IDcsSdkApiDelegate {
         }
     }
 
-    // ================= EVENTS =================
 
     override fun dcssdkEventBarcode(barcodeData: ByteArray?, barcodeType: Int, scannerId: Int) {
         val data = barcodeData?.toString(Charsets.UTF_8) ?: ""

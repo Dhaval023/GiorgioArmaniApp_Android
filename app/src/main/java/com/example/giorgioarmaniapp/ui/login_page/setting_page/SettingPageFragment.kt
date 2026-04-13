@@ -16,7 +16,6 @@ import com.google.android.material.textfield.TextInputEditText
 class SettingPageFragment : Fragment() {
 
     private val viewModel: SettingPageViewModel by viewModels()
-
     private lateinit var inboundEntry: TextInputEditText
     private lateinit var outboundEntry: TextInputEditText
     private lateinit var stocktakeEntry: TextInputEditText

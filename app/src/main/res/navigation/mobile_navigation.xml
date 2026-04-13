@@ -140,10 +140,21 @@
         tools:layout="@layout/fragment_consolidated_stock_transfer">
         <action
             android:id="@+id/action_consolidated_to_job"
-            app:destination="@id/nav_stock_transfer" />
+            app:destination="@id/nav_consolidated_st_job" />
         <action
             android:id="@+id/action_to_passcode"
             app:destination="@id/nav_passcode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_consolidated_st_job"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.consolidateStockTransfer_page.ConsolidatedSTJobPageFragment"
+        android:label="Consolidated ST Job"
+        tools:layout="@layout/fragment_consolidated_st_job_page">
+        <argument
+            android:name="pending_outbound_data"
+            app:argType="com.example.giorgioarmaniapp.models.OutBoundStockModel$PendingOutboundResult"
+            app:nullable="true" />
     </fragment>
 
     <dialog

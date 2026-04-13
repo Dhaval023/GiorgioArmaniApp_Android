@@ -30,8 +30,6 @@ class ScanOptionAdapter(
         holder.rbScanOption.text = model.title
         holder.rbScanOption.isChecked = model.isSelected
 
-        // Since the RadioButton is inside a RecyclerView and we want to handle the selection logic in the ViewModel,
-        // we intercept the click and pass it up.
         holder.rbScanOption.setOnClickListener {
             onOptionSelected(model)
         }

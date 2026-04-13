@@ -46,24 +46,17 @@ class ConsolidatedStockTransferFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
-            if (navigate == true) {
-                viewModel.onNavigateToSettingsHandled()
-                PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
-            }
-        }
-        observeData()
+        setupObservers()
         setupMenu()
-        viewModel.loadData()
+        viewModel.loadData(requireContext())
     }
 
-    private fun observeData() {
-
+    private fun setupObservers() {
         adapter = PendingOutboundAdapter(emptyList()) { item ->
-            navigateToNext(item)
+            viewModel.onListItemClicked(item)
         }
         recyclerView.adapter = adapter
-        
+
         viewModel.pendingList.observe(viewLifecycleOwner) { list ->
             if (list.isNullOrEmpty()) {
                 recyclerView.visibility = View.GONE
@@ -71,10 +64,21 @@ class ConsolidatedStockTransferFragment : Fragment() {
             } else {
                 recyclerView.visibility = View.VISIBLE
                 tvNoData.visibility = View.GONE
-                adapter = PendingOutboundAdapter(list) { item ->
-                    navigateToNext(item)
-                }
-                recyclerView.adapter = adapter
+                adapter.updateData(list)
+            }
+        }
+
+        viewModel.navigateToJob.observe(viewLifecycleOwner) { item ->
+            if (item != null) {
+                navigateToJobPage(item)
+                viewModel.onNavigateToJobHandled()
+            }
+        }
+
+        viewModel.navigateToSettings.observe(viewLifecycleOwner) { navigate ->
+            if (navigate == true) {
+                viewModel.onNavigateToSettingsHandled()
+                PasscodeFragment().show(parentFragmentManager, "PasscodePopup")
             }
         }
 
@@ -83,6 +87,27 @@ class ConsolidatedStockTransferFragment : Fragment() {
                 showErrorPopup(message)
                 viewModel.clearErrorMessage()
             }
+        }
+
+        viewModel.successMessage.observe(viewLifecycleOwner) { message ->
+            if (message != null) {
+                showSuccessPopup(message)
+                viewModel.clearSuccessMessage()
+            }
+        }
+    }
+
+    private fun navigateToJobPage(item: OutBoundStockModel.PendingOutboundResult) {
+        val bundle = Bundle().apply {
+            putSerializable("pending_outbound_data", item)
+        }
+        try {
+            findNavController().navigate(
+                R.id.action_consolidated_to_job,
+                bundle
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -96,23 +121,21 @@ class ConsolidatedStockTransferFragment : Fragment() {
             .show()
     }
 
-    private fun navigateToNext(item: OutBoundStockModel.PendingOutboundResult) {
-        val bundle = Bundle().apply {
-            putSerializable("data", item)
-        }
-        try {
-//            findNavController().navigate(
-//                R.id.action_consolidated_to_job,
-//                bundle
-//            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    private fun showSuccessPopup(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Success")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
+
     override fun onResume() {
         super.onResume()
         setupToolbar()
-        }
+    }
+
     private fun setupToolbar() {
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)

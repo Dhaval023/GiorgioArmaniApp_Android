@@ -57,7 +57,7 @@ class OutboundMainPageFragment : Fragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
-                menuInflater.inflate(R.menu.menu_outbound_main, menu)
+                menuInflater.inflate(R.menu.home_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -96,7 +96,6 @@ class OutboundMainPageFragment : Fragment() {
             menuAdapter.submitList(items)
         }
     }
-
 
     private fun observeViewModel() {
 

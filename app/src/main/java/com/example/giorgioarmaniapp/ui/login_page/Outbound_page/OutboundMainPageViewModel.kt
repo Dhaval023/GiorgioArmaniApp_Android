@@ -62,7 +62,7 @@ class OutboundMainPageViewModel : ViewModel() {
             if (model == null) return
             _navigateTo.value = model.outboundMenuNavType
         } catch (ex: Exception) {
-            // silent catch — matches original
+
         }
     }
 

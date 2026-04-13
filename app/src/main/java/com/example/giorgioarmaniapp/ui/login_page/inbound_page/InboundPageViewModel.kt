@@ -1,12 +1,12 @@
 package com.example.giorgioarmaniapp.ui.login_page.inbound_page
 
-import android.graphics.Color
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.giorgioarmaniapp.helper.base.Settings
+import com.example.giorgioarmaniapp.helper.isInternetAvailable
 import com.example.giorgioarmaniapp.models.InboundPendingListModel
 import com.example.giorgioarmaniapp.models.TagItem
 import com.example.giorgioarmaniapp.models.statics.ScanOptionModel
@@ -24,15 +24,9 @@ import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
 
-/**
- * Converted from C#: InboundPageViewModel.cs
- *
- * NOTE: Extends Android ViewModel (NOT BaseViewModel, which is now a singleton object).
- * All RFID reader access goes through BaseViewModel.rfidModel.
- */
+
 class InboundPageViewModel : ViewModel() {
 
-    // region --- Observable Properties ---
 
     private val _newAllItems =
         MutableLiveData<MutableList<InboundPendingListModel.InboundPendingModel>>(mutableListOf())
@@ -58,7 +52,6 @@ class InboundPageViewModel : ViewModel() {
     private var startTime: Date = Date()
     private var totalTagCount = 0
 
-    /** Callback to request barcode entry focus. Replaces C# Action<bool> ActiveOnFocus */
     var activeOnFocus: ((Boolean) -> Unit)? = null
 
     private val _uniqueTags = MutableLiveData("0")
@@ -219,7 +212,6 @@ class InboundPageViewModel : ViewModel() {
                 updateScanQTY(resolvedTag)
             }
         } catch (ex: Exception) {
-            // silent catch
         }
     }
 
@@ -365,15 +357,15 @@ class InboundPageViewModel : ViewModel() {
 
             BaseViewModel.rfidModel.rfidReader?.Config?.saveConfig()
         } catch (ex: Exception) {
-            // silent catch
         }
     }
     fun addInboundItem() {
         try {
             updateScanQTY(productIDCode)
             productIDCode = ""
-        } catch (ex: Exception) {
-            // silent catch
+        } catch (ex: Exception)
+        {
+
         }
     }
 
@@ -384,7 +376,7 @@ class InboundPageViewModel : ViewModel() {
             }
             _barcodeOrProductcode.value = ""
         } catch (ex: Exception) {
-            // silent catch
+
         }
     }
 
@@ -433,7 +425,7 @@ class InboundPageViewModel : ViewModel() {
                 }
             }
         } catch (ex: Exception) {
-            // silent catch
+
         }
     }
 
@@ -488,7 +480,7 @@ class InboundPageViewModel : ViewModel() {
 
                 _scanOptions.postValue(updatedList ?: mutableListOf())
             } catch (ex: Exception) {
-                // silent catch
+
             }
         }
     }
@@ -502,9 +494,13 @@ class InboundPageViewModel : ViewModel() {
     }
 
 
-    fun saveListData() {
+    fun saveListData(context: Context) {
         viewModelScope.launch {
             try {
+                if (!isInternetAvailable(context)) {
+                    _alertMessage.postValue("No Internet Connection")
+                    return@launch
+                }
                 var tempMore = ""
                 var tempLess = ""
 
@@ -582,7 +578,6 @@ class InboundPageViewModel : ViewModel() {
         _submitSuccess.value = false
     }
 
-    // endregion
 
     fun makeEqualQTYTag(selectedItem: InboundPendingListModel.InboundPendingModel) {
         try {
@@ -616,11 +611,11 @@ class InboundPageViewModel : ViewModel() {
 
             inboundScanTotalCount()
         } catch (ex: Exception) {
-            // silent catch
+
         }
     }
 
-    // endregion
+
 
     fun inboundScanTotalCount() {
         try {
@@ -628,11 +623,11 @@ class InboundPageViewModel : ViewModel() {
             _inboundExpectedQTYTotalCount.postValue(list.sumOf { it.actualQuantityDelivered })
             _inboundScannedQTYTotalCount.postValue(list.sumOf { it.scannedQTY })
         } catch (ex: Exception) {
-            // silent catch
+
         }
     }
 
-    // endregion
+
 
     override fun onCleared() {
         super.onCleared()

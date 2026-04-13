@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giorgioarmaniapp.R
+import androidx.activity.OnBackPressedCallback
 import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -35,7 +36,14 @@ class HomePageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().moveTaskToBack(true)
+                }
+            }
+        )
         val txtStoreName = view.findViewById<TextView>(R.id.txtStoreName)
         val txtEmployeeName = view.findViewById<TextView>(R.id.txtEmployeeName)
         val recyclerView = view.findViewById<RecyclerView>(R.id.menuRecyclerView)
@@ -86,6 +94,7 @@ class HomePageFragment : Fragment() {
                     viewModel.onNavigationHandled()
                 }
             }
+
         }
 
         val menuHost: MenuHost = requireActivity()

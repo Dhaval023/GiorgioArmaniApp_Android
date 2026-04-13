@@ -50,8 +50,8 @@ object ServiceConfiguration {
         "api.php?c=outbound&m=submit&fromStoreCode=%s&toStoreCode=%s&userID=%s&transferType=%s&id=%s&toStoreLocation=%s"
 
     // Temp API for ConsolidatedST
-    const val postOutboundConsolidatedSTSubmitListURL =
-        "api.php?c=outbound&m=submit&fromStoreCode=%s&toStoreCode=%s&userID=%s&transferType=%s&id=%s"
+    const val postOutboundConsolidatedSTSubmitListURL =""
+//        "api.php?c=outbound&m=submit&fromStoreCode=%s&toStoreCode=%s&userID=%s&transferType=%s&id=%s"
 
     const val getOutboundPendingListURL =
         "api.php?c=outbound&m=pending&storeCode=%s"
@@ -74,7 +74,6 @@ object ServiceConfiguration {
     const val postPasscodeURL =
         "api.php?c=passcode&m=checkCode&code=%s"
 
-    // ================= NEW STOCK TAKE =================
 
     // public static string GetSAPStockTakeListURL =
     // "https://apiarmanidev.gateway.webmethodscloud.de/gateway/GA_TEMERA_FMS_RFID_CYCLE_COUNT_IN/1/ZA_RFID_IF004_CC?$format=json&$filter=Site eq '{0}' and({1})&sap-language=EN&sap-client=100";

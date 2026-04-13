@@ -21,7 +21,6 @@ import com.google.android.material.textfield.TextInputEditText
 class SearchPageFragment : Fragment() {
 
     private val viewModel: SearchPageViewModel by viewModels()
-
     private lateinit var tagInput: TextInputEditText
     private lateinit var btnSave: MaterialButton
     private lateinit var tvDistance: TextView

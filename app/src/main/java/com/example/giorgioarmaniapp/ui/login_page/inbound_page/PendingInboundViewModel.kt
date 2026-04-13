@@ -32,7 +32,6 @@ class PendingInboundViewModel : ViewModel() {
                     isNotFound.value = false
 
                 } else {
-                    // empty or error case
                     pendingInboundList.value = emptyList()
                     isNotFound.value = true
                     isVisibleInboundList.value = false
