@@ -38,72 +38,72 @@ class ConsolidatedStockTransferViewModel : ViewModel() {
                     return@launch
                 }
                 _isLoading.value = true
-//                val response = restService.getPendingConsolidatedOutboundList(Settings.storeId)
+                val response = restService.getPendingConsolidatedOutboundList(Settings.storeId)
+
+                if (response != null) {
+                    if (!response.error.isNullOrEmpty()) {
+                        errorMessage.value = response.error
+                    }
+                    if (!response.success.isNullOrEmpty()) {
+                        successMessage.value = response.success
+                    }
+
+                    if (response.results != null) {
+                        pendingList.value = response.results
+                    } else {
+                        pendingList.value = emptyList()
+                    }
+
+                } else {
+                    pendingList.value = emptyList()
+                    errorMessage.value = "Failed to fetch data from server"
+                }
+//                val itemList1 = listOf(
+//                    OutBoundStockModel.OutBoundStockListModel(
+//                        globalTradeItemNumber = "GTIN001",
+//                        actualQuantityDelivered = 10,
+//                        scannedQTY = 2,
+//                        isDelTag = false
+//                    ),
+//                    OutBoundStockModel.OutBoundStockListModel(
+//                        globalTradeItemNumber = "GTIN002",
+//                        actualQuantityDelivered = 5,
+//                        scannedQTY = 1,
+//                        isDelTag = false
+//                    )
+//                )
 //
-//                if (response != null) {
-//                    if (!response.error.isNullOrEmpty()) {
-//                        errorMessage.value = response.error
-//                    }
-//                    if (!response.success.isNullOrEmpty()) {
-//                        successMessage.value = response.success
-//                    }
+//                val itemList2 = listOf(
+//                    OutBoundStockModel.OutBoundStockListModel(
+//                        globalTradeItemNumber = "GTIN003",
+//                        actualQuantityDelivered = 8,
+//                        scannedQTY = 0,
+//                        isDelTag = false
+//                    )
+//                )
 //
-//                    if (response.results != null) {
-//                        pendingList.value = response.results
-//                    } else {
-//                        pendingList.value = emptyList()
-//                    }
-
-//                } else {
-//                    pendingList.value = emptyList()
-//                    errorMessage.value = "Failed to fetch data from server"
-//                }
-                val itemList1 = listOf(
-                    OutBoundStockModel.OutBoundStockListModel(
-                        globalTradeItemNumber = "GTIN001",
-                        actualQuantityDelivered = 10,
-                        scannedQTY = 2,
-                        isDelTag = false
-                    ),
-                    OutBoundStockModel.OutBoundStockListModel(
-                        globalTradeItemNumber = "GTIN002",
-                        actualQuantityDelivered = 5,
-                        scannedQTY = 1,
-                        isDelTag = false
-                    )
-                )
-
-                val itemList2 = listOf(
-                    OutBoundStockModel.OutBoundStockListModel(
-                        globalTradeItemNumber = "GTIN003",
-                        actualQuantityDelivered = 8,
-                        scannedQTY = 0,
-                        isDelTag = false
-                    )
-                )
-
-                // Dummy Pending List
-                val dummyList = listOf(
-                    OutBoundStockModel.PendingOutboundResult(
-                        id = 1,
-                        toStore = "Store A",
-                        itemList = itemList1
-                    ),
-                    OutBoundStockModel.PendingOutboundResult(
-                        id = 2,
-                        toStore = "Store B",
-                        itemList = itemList2
-                    ),
-                    OutBoundStockModel.PendingOutboundResult(
-                        id = 3,
-                        toStore = "Store C",
-                        itemList = emptyList()
-                    )
-                )
-
-                pendingList.value = dummyList
-                successMessage.value = "Dummy data loaded"
-                successMessage.value = "Dummy data loaded"
+//                // Dummy Pending List
+//                val dummyList = listOf(
+//                    OutBoundStockModel.PendingOutboundResult(
+//                        id = 1,
+//                        toStore = "Store A",
+//                        itemList = itemList1
+//                    ),
+//                    OutBoundStockModel.PendingOutboundResult(
+//                        id = 2,
+//                        toStore = "Store B",
+//                        itemList = itemList2
+//                    ),
+//                    OutBoundStockModel.PendingOutboundResult(
+//                        id = 3,
+//                        toStore = "Store C",
+//                        itemList = emptyList()
+//                    )
+//                )
+//
+//                pendingList.value = dummyList
+//                successMessage.value = "Dummy data loaded"
+//                successMessage.value = "Dummy data loaded"
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "An unknown error occurred"
                 e.printStackTrace()
