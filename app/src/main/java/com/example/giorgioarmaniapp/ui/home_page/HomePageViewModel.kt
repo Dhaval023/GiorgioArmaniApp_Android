@@ -19,16 +19,12 @@ class HomePageViewModel : ViewModel() {
 
     private val _storeName = MutableLiveData<String>()
     val storeName: LiveData<String> = _storeName
-
     private val _employeeName = MutableLiveData<String>()
     val employeeName: LiveData<String> = _employeeName
-
     private val _menuItems = MutableLiveData<List<HomePageMenuModel>>()
     val menuItems: LiveData<List<HomePageMenuModel>> = _menuItems
-
     private val _navigateTo = MutableLiveData<String?>()
     val navigateTo: LiveData<String?> = _navigateTo
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 

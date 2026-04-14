@@ -36,12 +36,12 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zebra.rfid.api3.Antennas
 
-class OutboundStockTransferPageFragment : Fragment() {
+class OutboundSTPageFragment : Fragment() {
 
-    private val viewModel: OutboundStockTransferPageViewModel by viewModels()
+    private val viewModel: OutboundSTPageViewModel by viewModels()
 
     private lateinit var scanOptionAdapter: ScanOptionAdapter
-    private lateinit var outboundItemAdapter: StockTransferItemAdapter
+    private lateinit var outboundItemAdapter: STItemAdapter
     private lateinit var loadingOverlay: View
 
     private var isClearingBarcode = false
@@ -243,7 +243,7 @@ class OutboundStockTransferPageFragment : Fragment() {
 
     private fun setupOutboundList(view: View) {
         val rv = view.findViewById<RecyclerView>(R.id.rvOutboundItems)
-        outboundItemAdapter = StockTransferItemAdapter(
+        outboundItemAdapter = STItemAdapter(
             onDelete = { item, position ->
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Alert")

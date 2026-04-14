@@ -17,7 +17,7 @@ class PendingOutboundAdapter(
         list = newList
         notifyDataSetChanged()
     }
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvStore: TextView = view.findViewById(R.id.tvStore)
     }
 

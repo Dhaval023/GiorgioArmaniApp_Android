@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.giorgioarmaniapp.helper.base.Settings
+import com.example.giorgioarmaniapp.helper.base.Settings.prefixGTINList
 import com.example.giorgioarmaniapp.helper.isInternetAvailable
 import com.example.giorgioarmaniapp.models.InboundPendingListModel
 import com.example.giorgioarmaniapp.models.TagItem
@@ -27,7 +28,6 @@ import java.util.TimerTask
 
 class InboundPageViewModel : ViewModel() {
 
-
     private val _newAllItems =
         MutableLiveData<MutableList<InboundPendingListModel.InboundPendingModel>>(mutableListOf())
     val newAllItems: LiveData<MutableList<InboundPendingListModel.InboundPendingModel>>
@@ -45,9 +45,6 @@ class InboundPageViewModel : ViewModel() {
 
     private val _listAvailable = MutableLiveData(false)
     val listAvailable: LiveData<Boolean> get() = _listAvailable
-
-    // hintAvailable is the inverse of listAvailable
-    val hintAvailable: Boolean get() = _listAvailable.value != true
 
     private var startTime: Date = Date()
     private var totalTagCount = 0
@@ -382,7 +379,7 @@ class InboundPageViewModel : ViewModel() {
 
     fun updateScanQTY(gtin: String) {
         try {
-            for (item in Settings.prefixGTINList) {
+            for (item in prefixGTINList) {
                 val itemName = item.name ?: continue
                 if (gtin.startsWith(itemName)) {
                     if (gtin.isEmpty()) {
@@ -484,15 +481,6 @@ class InboundPageViewModel : ViewModel() {
             }
         }
     }
-
-    fun clearList() {
-        tagListDict.clear()
-        allItems.clear()
-        totalTagCount = 0
-        startTime = Date()
-        setTimer()
-    }
-
 
     fun saveListData(context: Context) {
         viewModelScope.launch {

@@ -23,7 +23,6 @@ class HomePageFragment : Fragment() {
 
     private val viewModel: HomePageViewModel by viewModels()
     private lateinit var adapter: HomePageAdapter
-
     private lateinit var loadingOverlay: View
 
     override fun onCreateView(
@@ -44,6 +43,7 @@ class HomePageFragment : Fragment() {
                 }
             }
         )
+        viewModel.stopReadingMode()
         val txtStoreName = view.findViewById<TextView>(R.id.txtStoreName)
         val txtEmployeeName = view.findViewById<TextView>(R.id.txtEmployeeName)
         val recyclerView = view.findViewById<RecyclerView>(R.id.menuRecyclerView)

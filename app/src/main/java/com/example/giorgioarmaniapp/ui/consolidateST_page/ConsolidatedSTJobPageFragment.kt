@@ -50,7 +50,6 @@ class ConsolidatedSTJobPageFragment : Fragment() {
     private lateinit var etBarcodeEntry:       EditText
     private lateinit var btnSubmit:            Button
     private lateinit var loadingOverlay:       View
-
     private lateinit var adapter: ConsolidatedSTAdapter
     private lateinit var scanOptionAdapter: ScanOptionAdapter
 
@@ -168,15 +167,6 @@ class ConsolidatedSTJobPageFragment : Fragment() {
         inflater.inflate(R.menu.home_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-//    @Deprecated("Deprecated in Java")
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == R.id.action_settings) {
-//            viewModel.()
-//            return true
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
     private fun bindViews(view: View) {
         rvScanOptions        = view.findViewById(R.id.rvScanOptions)

@@ -20,7 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class OutboundStockTransferPageViewModel : ViewModel() {
+class OutboundSTPageViewModel : ViewModel() {
 
     private val tagReadLock = Any()
     private val tagListDict: MutableMap<String, String> = mutableMapOf()

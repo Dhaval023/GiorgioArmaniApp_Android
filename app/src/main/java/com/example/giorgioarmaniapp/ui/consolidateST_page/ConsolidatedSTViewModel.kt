@@ -11,7 +11,7 @@ import com.example.giorgioarmaniapp.models.OutBoundStockModel
 import com.example.giorgioarmaniapp.service.RestService
 import kotlinx.coroutines.launch
 
-class ConsolidatedStockTransferViewModel : ViewModel() {
+class ConsolidatedSTViewModel : ViewModel() {
 
     val pageTitle = MutableLiveData("Pending OutBound List")
     val pendingList = MutableLiveData<List<OutBoundStockModel.PendingOutboundResult>?>()
@@ -23,7 +23,7 @@ class ConsolidatedStockTransferViewModel : ViewModel() {
 
     val errorMessage = MutableLiveData<String?>()
     val successMessage = MutableLiveData<String?>()
-    
+
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -58,55 +58,11 @@ class ConsolidatedStockTransferViewModel : ViewModel() {
                     pendingList.value = emptyList()
                     errorMessage.value = "Failed to fetch data from server"
                 }
-//                val itemList1 = listOf(
-//                    OutBoundStockModel.OutBoundStockListModel(
-//                        globalTradeItemNumber = "GTIN001",
-//                        actualQuantityDelivered = 10,
-//                        scannedQTY = 2,
-//                        isDelTag = false
-//                    ),
-//                    OutBoundStockModel.OutBoundStockListModel(
-//                        globalTradeItemNumber = "GTIN002",
-//                        actualQuantityDelivered = 5,
-//                        scannedQTY = 1,
-//                        isDelTag = false
-//                    )
-//                )
-//
-//                val itemList2 = listOf(
-//                    OutBoundStockModel.OutBoundStockListModel(
-//                        globalTradeItemNumber = "GTIN003",
-//                        actualQuantityDelivered = 8,
-//                        scannedQTY = 0,
-//                        isDelTag = false
-//                    )
-//                )
-//
-//                // Dummy Pending List
-//                val dummyList = listOf(
-//                    OutBoundStockModel.PendingOutboundResult(
-//                        id = 1,
-//                        toStore = "Store A",
-//                        itemList = itemList1
-//                    ),
-//                    OutBoundStockModel.PendingOutboundResult(
-//                        id = 2,
-//                        toStore = "Store B",
-//                        itemList = itemList2
-//                    ),
-//                    OutBoundStockModel.PendingOutboundResult(
-//                        id = 3,
-//                        toStore = "Store C",
-//                        itemList = emptyList()
-//                    )
-//                )
-//
-//                pendingList.value = dummyList
-//                successMessage.value = "Dummy data loaded"
-//                successMessage.value = "Dummy data loaded"
+
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "An unknown error occurred"
                 e.printStackTrace()
+
             } finally {
                 _isLoading.value = false
             }

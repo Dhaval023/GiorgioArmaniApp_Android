@@ -109,7 +109,7 @@
 
     <fragment
         android:id="@+id/nav_stock_transfer"
-        android:name="com.example.giorgioarmaniapp.ui.login_page.Outbound_page.OutboundStockTransferPageFragment"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.Outbound_page.OutboundSTPageFragment"
         android:label="Stock Transfer"
         tools:layout="@layout/fragment_outbound_stocktransfer_page">
         <action
@@ -135,7 +135,7 @@
 
     <fragment
         android:id="@+id/nav_consolidated_stock_transfer"
-        android:name="com.example.giorgioarmaniapp.ui.login_page.consolidateStockTransfer_page.ConsolidatedStockTransferFragment"
+        android:name="com.example.giorgioarmaniapp.ui.login_page.consolidateStockTransfer_page.ConsolidatedSTFragment"
         android:label="Pending OutBound List"
         tools:layout="@layout/fragment_consolidated_stock_transfer">
         <action

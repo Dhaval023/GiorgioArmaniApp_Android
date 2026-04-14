@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.giorgioarmaniapp.R
 import com.example.giorgioarmaniapp.models.OutBoundStockModel
 
-class StockTransferItemAdapter(
+class STItemAdapter(
     private val onDelete: (OutBoundStockModel.OutBoundStockListModel, Int) -> Unit
-) : ListAdapter<OutBoundStockModel.OutBoundStockListModel, StockTransferItemAdapter.ViewHolder>(DiffCallback) {
+) : ListAdapter<OutBoundStockModel.OutBoundStockListModel, STItemAdapter.ViewHolder>(DiffCallback) {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvGTIN: TextView = itemView.findViewById(R.id.tvGTIN)

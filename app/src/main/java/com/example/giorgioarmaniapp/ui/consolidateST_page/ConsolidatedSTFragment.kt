@@ -22,9 +22,9 @@ import com.example.giorgioarmaniapp.models.OutBoundStockModel
 import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
 
-class ConsolidatedStockTransferFragment : Fragment() {
+class ConsolidatedSTFragment : Fragment() {
 
-    private lateinit var viewModel: ConsolidatedStockTransferViewModel
+    private lateinit var viewModel: ConsolidatedSTViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var tvNoData: TextView
     private lateinit var adapter: PendingOutboundAdapter
@@ -39,7 +39,7 @@ class ConsolidatedStockTransferFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[ConsolidatedStockTransferViewModel::class.java]
+        viewModel = ViewModelProvider(this)[ConsolidatedSTViewModel::class.java]
 
         recyclerView = view.findViewById(R.id.rvPendingList)
         tvNoData = view.findViewById(R.id.tvNoData)

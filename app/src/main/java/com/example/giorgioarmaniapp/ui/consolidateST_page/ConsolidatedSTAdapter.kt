@@ -25,7 +25,7 @@ class ConsolidatedSTAdapter(
         }
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvGTIN:       TextView = view.findViewById(R.id.tvGTIN)
         val tvActualQty:  TextView = view.findViewById(R.id.tvActualQty)
         val tvScannedQty: TextView = view.findViewById(R.id.tvScannedQty)

@@ -384,7 +384,6 @@ class ConsolidatedSTJobPageViewModel : ViewModel() {
     }
 
     fun clearNavigateBack()      { _navigateBack.value        = false }
-    fun clearNavigateSettings()  { _navigateToSettings.value  = false }
     fun clearBarcodeFocus()      { _requestBarcodeFocus.value = false }
     fun clearError()             { _errorMessage.value        = null  }
     fun clearSuccess()           { _successMessage.value      = null  }
