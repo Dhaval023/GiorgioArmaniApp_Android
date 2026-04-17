@@ -121,14 +121,17 @@ class InboundPageViewModel : ViewModel() {
     private val _inboundScannedQTYTotalCount = MutableLiveData(0)
     val inboundScannedQTYTotalCount: LiveData<Int> get() = _inboundScannedQTYTotalCount
 
-    private val _alertMessage = MutableLiveData<String>()
-    val alertMessage: LiveData<String> get() = _alertMessage
+    private val _alertMessage = MutableLiveData<String?>()
+    val alertMessage: LiveData<String?> get() = _alertMessage
 
     private val _submitSuccess = MutableLiveData(false)
     val submitSuccess: LiveData<Boolean> get() = _submitSuccess
 
     private val _navigateToSettings = MutableLiveData(false)
     val navigateToSettings: LiveData<Boolean> get() = _navigateToSettings
+
+    private val _showDeleteConfirmation = MutableLiveData<InboundPendingListModel.InboundPendingModel?>()
+    val showDeleteConfirmation: LiveData<InboundPendingListModel.InboundPendingModel?> get() = _showDeleteConfirmation
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -604,7 +607,7 @@ class InboundPageViewModel : ViewModel() {
         }
     }
 
-    fun deleteTag(selectedItem: InboundPendingListModel.InboundPendingModel) {
+    fun confirmDeleteTag(selectedItem: InboundPendingListModel.InboundPendingModel) {
         try {
             val tempList = _newAllItems.value?.toMutableList() ?: return
             tempList.remove(selectedItem)
@@ -616,8 +619,9 @@ class InboundPageViewModel : ViewModel() {
             keysToRemove.forEach { tagListDict.remove(it) }
 
             inboundScanTotalCount()
+            _showDeleteConfirmation.value = null
         } catch (ex: Exception) {
-
+            // silent catch
         }
     }
 

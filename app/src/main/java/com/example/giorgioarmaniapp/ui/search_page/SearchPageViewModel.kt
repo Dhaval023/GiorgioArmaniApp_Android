@@ -136,7 +136,6 @@ class SearchPageViewModel : ViewModel() {
                         ))
 
                 if (match) {
-                    Log.d("RFID", "MATCH FOUND → $tagId (Decoded: $decodedGtin)")
 
                     currentTagPattern = tagId
                     _tagPattern.postValue(tagId)
@@ -144,10 +143,9 @@ class SearchPageViewModel : ViewModel() {
 
                     stopInventory()
 
-                    // Ensure smooth transition from inventory to tag locating like in C#
                     Handler(Looper.getMainLooper()).postDelayed({
                         hhTriggerEvent(true)
-                    }, 500) // Increase delay slightly for smooth transition
+                    }, 500) 
 
                     break
                 }
@@ -187,23 +185,6 @@ class SearchPageViewModel : ViewModel() {
         }
     }
 
-    fun clearSearch() {
-        stopInventory()
-        resetSearch()
-    }
-
-    private fun resetSearch() {
-        Log.d("RFID", "RESET")
-
-        tagFinderStatus = false
-        currentTagPattern = null
-        _tagPattern.postValue(null)
-        _relativeDistance.postValue("0")
-        _distanceBoxHeight.postValue(0)
-
-        _isEnabledTextGTIN.postValue(true)
-    }
-
     fun searchTag() {
         if (textGTINValue.isEmpty()) {
             _alertEvent.value = "Enter Product ID"
@@ -217,7 +198,6 @@ class SearchPageViewModel : ViewModel() {
         tagFinderStatus = false
         updateIn()
         _isEnabledTextGTIN.value = false
-        // Inventory will be started by the physical trigger only
     }
 
     fun showLoading(loading: Boolean) {

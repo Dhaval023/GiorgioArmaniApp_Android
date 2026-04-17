@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
@@ -16,8 +17,8 @@ import com.example.giorgioarmaniapp.R
 import com.example.giorgioarmaniapp.models.InboundPendingListModel
 
 class InboundItemAdapter(
-    private val onDelete: (InboundPendingListModel.InboundPendingModel) -> Unit,
-    private val onMakeEqual: (InboundPendingListModel.InboundPendingModel) -> Unit
+    private val onDelete: (InboundPendingListModel.InboundPendingModel, Int) -> Unit,
+    private val onMakeEqual: (InboundPendingListModel.InboundPendingModel, Int) -> Unit
 ) : ListAdapter<InboundPendingListModel.InboundPendingModel, InboundItemAdapter.ViewHolder>(DiffCallback) {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -87,9 +88,9 @@ class InboundItemAdapter(
 
                 when {
                     item.isDelTag ->
-                        onDelete(item)
+                        onDelete(item, position)
                     item.isInvalidCount ->
-                        onMakeEqual(item)
+                        onMakeEqual(item, position)
                     else ->
                         notifyItemChanged(position)
                 }
@@ -115,6 +116,18 @@ class InboundItemAdapter(
                         itemView.right.toFloat(), itemView.bottom.toFloat(),
                         paint
                     )
+
+                    val icon = ContextCompat.getDrawable(recyclerView.context, R.drawable.bin)
+                    if (icon != null) {
+                        val size = 45
+                        val iconMargin = (itemView.height - size) / 2
+                        val iconTop = itemView.top + iconMargin
+                        val iconBottom = iconTop + size
+                        val iconRight = itemView.right - iconMargin
+                        val iconLeft = iconRight - size
+                        icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                        icon.draw(c)
+                    }
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }

@@ -472,14 +472,6 @@ class OutboundSTPageViewModel : ViewModel() {
         }
     }
 
-    fun deleteTag(selectedItem: OutBoundStockModel.OutBoundStockListModel) {
-        _showDeleteConfirmation.value = selectedItem
-    }
-
-    fun onDismissDeleteConfirmation() {
-        _showDeleteConfirmation.value = null
-    }
-
     fun confirmDeleteTag(selectedItem: OutBoundStockModel.OutBoundStockListModel) {
         try {
             val tempList = _allOutboundItems.value?.toMutableList() ?: return

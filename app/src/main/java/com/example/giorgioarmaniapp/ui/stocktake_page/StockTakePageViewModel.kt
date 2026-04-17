@@ -306,32 +306,6 @@ class StockTakePageViewModel : ViewModel() {
         dataTotalCount()
     }
 
-    fun pendingStockTakeListData() {
-        viewModelScope.launch {
-            _showLoading.value = true
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    restservice.getSOHPendingList(
-                        Settings.storeId, selectedCategoryText,
-                        selectedBrandText, selectedGenderText
-                    )
-                }
-                if (result?.results?.isNotEmpty() == true) {
-                    val items = result.results[0].itemList?.toMutableList() ?: mutableListOf()
-                    _stockTakeScannedItems.value = items
-                    _myStockTakeScannedItems.value = items
-                    dataTotalCount()
-                } else {
-                    _toastMessage.value = "No Data Found."
-                }
-            } catch (e: Exception) {
-                _errorMessage.value = e.message
-            } finally {
-                _showLoading.value = false
-            }
-        }
-    }
-
     fun submitStockTakeList() {
         viewModelScope.launch {
             if (Settings.storeId.isNullOrEmpty() && Settings.userId.toString().isEmpty()) {
@@ -385,13 +359,6 @@ class StockTakePageViewModel : ViewModel() {
         }
     }
 
-    fun onReaderConnectionChanged(connected: Boolean, batchMode: Boolean) {
-        isConnected = connected
-        isBatchMode = batchMode
-        stopTimer()
-        updateHints()
-    }
-
     private fun updateHints() {
         val items = _stockTakeScannedItems.value
         if (items.isNullOrEmpty()) {
@@ -437,7 +404,6 @@ class StockTakePageViewModel : ViewModel() {
     }
 
     fun clearNavigateBack() { _navigateBack.value = false }
-    fun clearToast()        { _toastMessage.value = null  }
     fun clearError()        { _errorMessage.value = null  }
     fun clearSuccess()      { _successMessage.value = null }
 

@@ -174,20 +174,26 @@ class InboundPageFragment : Fragment() {
     private fun setupInboundList(view: View) {
         val rvItems = view.findViewById<RecyclerView>(R.id.rvInboundItems)
         inboundItemAdapter = InboundItemAdapter(
-            onDelete = { item: InboundPendingListModel.InboundPendingModel ->
+            onDelete = { item, position ->
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Warning")
                     .setMessage("Are you sure you want to Remove this from List?")
-                    .setPositiveButton("Yes") { _, _ -> viewModel.deleteTag(item) }
-                    .setNegativeButton("No", null)
+                    .setPositiveButton("Yes") { _, _ -> viewModel.confirmDeleteTag(item) }
+                    .setNegativeButton("No") { _, _ ->
+                        inboundItemAdapter.notifyItemChanged(position)
+                    }
+                    .setOnCancelListener {
+                        inboundItemAdapter.notifyItemChanged(position)
+                    }
                     .show()
             },
-            onMakeEqual = { item: InboundPendingListModel.InboundPendingModel ->
+            onMakeEqual = { item, _ ->
                 viewModel.makeEqualQTYTag(item)
             }
         )
         rvItems.layoutManager = LinearLayoutManager(requireContext())
         rvItems.adapter = inboundItemAdapter
+        inboundItemAdapter.attachSwipeTo(rvItems)
 
         viewModel.newAllItems.observe(viewLifecycleOwner) { items ->
             inboundItemAdapter.submitList(items?.toList())
