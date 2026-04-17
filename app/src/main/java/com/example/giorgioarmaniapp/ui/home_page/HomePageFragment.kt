@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giorgioarmaniapp.R
+import androidx.navigation.NavController
 import androidx.activity.OnBackPressedCallback
 import com.example.giorgioarmaniapp.ui.login_page.popup.PasscodeFragment
 import com.google.android.material.appbar.MaterialToolbar
@@ -24,6 +25,11 @@ class HomePageFragment : Fragment() {
     private val viewModel: HomePageViewModel by viewModels()
     private lateinit var adapter: HomePageAdapter
     private lateinit var loadingOverlay: View
+    private val destinationListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        if (destination.id == R.id.nav_home) {
+            setupToolbar()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -114,6 +120,8 @@ class HomePageFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        findNavController().addOnDestinationChangedListener(destinationListener)
     }
 
     private fun setupToolbar() {
@@ -158,6 +166,11 @@ class HomePageFragment : Fragment() {
                 .setNegativeButton("No", null)
                 .show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        findNavController().removeOnDestinationChangedListener(destinationListener)
     }
 
     override fun onResume() {

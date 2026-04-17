@@ -181,13 +181,11 @@ class RestService {
                 "https://api-gw-sap-quality.giorgioarmani.tech/fms-odata/ZRFID_IF004_SRV/ZA_RFID_IF004_CC"
 
             val resource = "$baseUrl?\$format=json&\$filter=Site eq '$storeCode' and ($listModel)&sap-language=EN&sap-client=100"
-            Log.d("RestService", ">>> FULL URL: $resource")
 
             val headers = mapOf("x-api-key" to apiKey)
             val response = RestClientService.executeGetRequestAsyncForSAP(resource, headers)
             if (response != null) {
                 val result = gson.fromJson(response, OutBoundStockModel.Root::class.java)
-                Log.d("RestService", ">>> RESULT COUNT: ${result?.d?.results?.size ?: "NULL"}")
                 result
             } else null
         } catch (e: Exception) {

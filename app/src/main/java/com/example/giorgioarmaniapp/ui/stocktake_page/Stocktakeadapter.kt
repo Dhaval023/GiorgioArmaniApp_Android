@@ -45,7 +45,6 @@ class StockTakeAdapter(
         holder.tvSOHQty.text      = item.sohQuantity.toString()
         holder.tvScannedQty.text  = item.scannedQTY.toString()
 
-        // Highlight rows where scanned < expected (matches original red colour logic)
         val diff = item.scannedQTY - item.sohQuantity
         holder.itemView.setBackgroundColor(
             when {

@@ -41,7 +41,6 @@ class SearchPageFragment : Fragment() {
 
         viewModel.isEnabledTextGTIN.observe(viewLifecycleOwner) {
             tagInput.isEnabled = it
-            btnSave.isEnabled = it
         }
 
         viewModel.relativeDistance.observe(viewLifecycleOwner) {

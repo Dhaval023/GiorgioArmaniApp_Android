@@ -58,7 +58,6 @@ class StockTakePageFragment : Fragment() {
         setupListeners()
         setupMenu()
 
-        // Initialize RFID reader state from BaseViewModel singleton
         viewModel.initReader(
             model     = BaseViewModel.rfidModel,
             batchMode = BaseViewModel.rfidModel.isBatchMode,

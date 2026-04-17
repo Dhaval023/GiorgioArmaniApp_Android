@@ -38,7 +38,6 @@ class InboundPageViewModel : ViewModel() {
     val selectedProductTag: LiveData<InboundPendingListModel.InboundPendingModel?>
         get() = _selectedProductTag
 
-    // allItems holds raw TagItem objects (RFID/Barcode raw reads)
     private val allItems: MutableList<TagItem> = mutableListOf()
 
     private val tagListDict: MutableMap<String, String> = mutableMapOf()
@@ -72,6 +71,7 @@ class InboundPageViewModel : ViewModel() {
     var isBusy: Boolean = false
 
     private val _productIDCode = MutableLiveData("")
+    val productIDCodeLive: LiveData<String> get() = _productIDCode
     var productIDCode: String
         get() = _productIDCode.value ?: ""
         set(value) { _productIDCode.value = value }
@@ -92,6 +92,13 @@ class InboundPageViewModel : ViewModel() {
 
     private val _isBarcodeViewVisible = MutableLiveData(false)
     val isBarcodeViewVisible: LiveData<Boolean> get() = _isBarcodeViewVisible
+
+    private val _clearBarcodeField = MutableLiveData(false)
+    val clearBarcodeField: LiveData<Boolean> get() = _clearBarcodeField
+
+    fun onBarcodeFieldCleared() {
+        _clearBarcodeField.value = false
+    }
 
     private val _scanOptions =
         MutableLiveData<MutableList<ScanOptionModel>>(mutableListOf())
@@ -175,6 +182,7 @@ class InboundPageViewModel : ViewModel() {
                     rssi = barcodeRssi.toInt()
                 )
             )
+            updateScanQTY(barcode)
         }
     }
 
@@ -205,26 +213,27 @@ class InboundPageViewModel : ViewModel() {
         try {
             val resolvedTag = extractGTINFromEPC(tag)
             if (resolvedTag != null) {
-                tagListDict[tag] = resolvedTag
-                updateScanQTY(resolvedTag)
+                val tagWithoutIndicator = resolvedTag.substring(1)
+                tagListDict[tag] = tagWithoutIndicator
+                updateScanQTY(tagWithoutIndicator)
             }
         } catch (ex: Exception) {
         }
     }
 
     private fun hexToBinary(hex: String): String {
-        return hex.chunked(2)
-            .joinToString("") { byte ->
-                Integer.toBinaryString(byte.toInt(16)).padStart(8, '0')
-            }
+        return hex.chunked(1).joinToString("") { hexChar ->
+            Integer.toBinaryString(hexChar.toInt(16)).padStart(4, '0')
+        }
     }
 
     private fun extractGTINFromEPC(tagID: String): String? {
         return try {
             val binary = hexToBinary(tagID)
             if (binary.length < 96) return null
-            val partition = binary.substring(14, 17).toInt(2)
-            val (companyPrefixBits, companyPrefixDigits, itemRefBits, itemRefDigits) = when (partition) {
+
+            val partition = binary.substring(11, 14).toInt(2)
+            val (cpBits, cpDig, irBits, irDig) = when (partition) {
                 0 -> arrayOf(40, 12, 4,  1)
                 1 -> arrayOf(37, 11, 7,  2)
                 2 -> arrayOf(34, 10, 10, 3)
@@ -234,21 +243,31 @@ class InboundPageViewModel : ViewModel() {
                 6 -> arrayOf(20, 6,  24, 7)
                 else -> return null
             }
-            val companyPrefix = binary.substring(17, 17 + companyPrefixBits).toLong(2).toString().padStart(companyPrefixDigits, '0')
-            val itemRef = binary.substring(17 + companyPrefixBits, 17 + companyPrefixBits + itemRefBits).toLong(2).toString().padStart(itemRefDigits, '0')
-            val gtinWithoutCheck = "0$companyPrefix$itemRef"
-            val checkDigit = calculateGTINCheckDigit(gtinWithoutCheck)
-            "$gtinWithoutCheck$checkDigit"
-        } catch (ex: Exception) { null }
+
+            val companyPrefix = binary.substring(14, 14 + cpBits).toLong(2).toString().padStart(cpDig, '0')
+            val itemRefWithIndicator = binary.substring(14 + cpBits, 14 + cpBits + irBits).toLong(2).toString().padStart(irDig, '0')
+
+            val indicator = itemRefWithIndicator.substring(0, 1)
+            val itemRefDigits = itemRefWithIndicator.substring(1)
+
+            val gtin13 = "$indicator$companyPrefix$itemRefDigits"
+            val checkDigit = calculateGTINCheckDigit(gtin13)
+            val finalGtin = "$gtin13$checkDigit"
+
+            return finalGtin
+        } catch (ex: Exception) {
+            null
+        }
     }
 
     private fun calculateGTINCheckDigit(gtin13: String): Int {
         var sum = 0
         for (i in gtin13.indices) {
             val digit = gtin13[i].digitToInt()
-            sum += if (i % 2 == 0) digit else digit * 3
+            sum += if (i % 2 == 0) digit * 3 else digit
         }
-        return (10 - (sum % 10)) % 10
+        val remainder = sum % 10
+        return if (remainder == 0) 0 else 10 - remainder
     }
 
     fun hhtTriggerEvent(pressed: Boolean) {
@@ -372,24 +391,25 @@ class InboundPageViewModel : ViewModel() {
                 updateScanQTY(code)
             }
             _barcodeOrProductcode.value = ""
+            _clearBarcodeField.postValue(true)
         } catch (ex: Exception) {
 
         }
     }
 
     fun updateScanQTY(gtin: String) {
-        try {
-            for (item in prefixGTINList) {
-                val itemName = item.name ?: continue
-                if (gtin.startsWith(itemName)) {
-                    if (gtin.isEmpty()) {
-                        return
-                    }
+        viewModelScope.launch(Dispatchers.Main) {
+            try {
+                if (gtin.isEmpty()) return@launch
 
+                val matchingPrefix = prefixGTINList.find { it.name != null && gtin.startsWith(it.name!!) }
+
+                if (matchingPrefix != null) {
                     val tempList = _newAllItems.value?.toMutableList() ?: mutableListOf()
 
-                    if (tempList.any { it.globalTradeItemNumber?.contains(gtin) == true }) {
-                        for (tempGTIN in tempList.filter { it.globalTradeItemNumber == gtin }) {
+                    val existingItems = tempList.filter { it.globalTradeItemNumber?.contains(gtin) == true }
+                    if (existingItems.isNotEmpty()) {
+                        for (tempGTIN in existingItems) {
                             tempGTIN.scannedQTY += 1
 
                             if (tempGTIN.deliveryItem == "") {
@@ -401,7 +421,6 @@ class InboundPageViewModel : ViewModel() {
                                 tempGTIN.isInvalidCount = true
                             }
                         }
-                        _newAllItems.postValue(tempList)
                     } else {
                         tempList.add(
                             InboundPendingListModel.InboundPendingModel(
@@ -415,14 +434,13 @@ class InboundPageViewModel : ViewModel() {
                                 invalidGTINNumberCLR = "#FF0000" // Red
                             )
                         )
-                        _newAllItems.postValue(tempList)
                     }
-
+                    _newAllItems.value = tempList
                     inboundScanTotalCount()
                 }
-            }
-        } catch (ex: Exception) {
+            } catch (ex: Exception) {
 
+            }
         }
     }
 

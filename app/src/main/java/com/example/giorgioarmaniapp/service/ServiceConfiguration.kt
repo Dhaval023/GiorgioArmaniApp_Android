@@ -50,8 +50,8 @@ object ServiceConfiguration {
         "api.php?c=outbound&m=submit&fromStoreCode=%s&toStoreCode=%s&userID=%s&transferType=%s&id=%s&toStoreLocation=%s"
 
     // Temp API for ConsolidatedST
-    const val postOutboundConsolidatedSTSubmitListURL =""
-//        "api.php?c=outbound&m=submit&fromStoreCode=%s&toStoreCode=%s&userID=%s&transferType=%s&id=%s"
+    const val postOutboundConsolidatedSTSubmitListURL =
+        "api.php?c=outbound&m=submit&fromStoreCode=%s&toStoreCode=%s&userID=%s&transferType=%s&id=%s"
 
     const val getOutboundPendingListURL =
         "api.php?c=outbound&m=pending&storeCode=%s"

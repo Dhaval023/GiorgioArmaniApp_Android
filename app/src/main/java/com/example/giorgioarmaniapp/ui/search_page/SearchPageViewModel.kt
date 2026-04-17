@@ -56,17 +56,69 @@ class SearchPageViewModel : ViewModel() {
     }
 
     fun performInventory() {
-        try { BaseViewModel.rfidModel.performInventory() }
-        catch (e: Exception) { e.printStackTrace() }
+        try {
+            BaseViewModel.rfidModel.performInventory()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun stopInventory() {
-        try { BaseViewModel.rfidModel.stopInventory() }
-        catch (e: Exception) { e.printStackTrace() }
+        try {
+            BaseViewModel.rfidModel.stopInventory()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun statusEvent(type: STATUS_EVENT_TYPE) {
         Log.d("RFID", "Status: $type")
+    }
+
+    private var currentTagPattern: String? = null
+
+    private fun decodeSGTIN96(hex: String): String? {
+        if (hex.length != 24 || !hex.startsWith("30")) return null
+        try {
+            var binary = java.math.BigInteger(hex, 16).toString(2)
+            while (binary.length < 96) binary = "0" + binary
+
+            val partition = binary.substring(11, 14).toInt(2)
+            val prefixBitsArray = intArrayOf(40, 37, 34, 30, 27, 24, 20)
+            val itemBitsArray = intArrayOf(4, 7, 10, 14, 17, 20, 24)
+            val prefixDigitsArray = intArrayOf(12, 11, 10, 9, 8, 7, 6)
+            val itemDigitsArray = intArrayOf(1, 2, 3, 4, 5, 6, 7)
+
+            val prefixBits = prefixBitsArray[partition]
+            val itemBits = itemBitsArray[partition]
+            val prefixDigits = prefixDigitsArray[partition]
+            val itemDigits = itemDigitsArray[partition]
+
+            var prefixVal =
+                java.math.BigInteger(binary.substring(14, 14 + prefixBits), 2).toString()
+            while (prefixVal.length < prefixDigits) prefixVal = "0" + prefixVal
+
+            var itemVal = java.math.BigInteger(
+                binary.substring(14 + prefixBits, 14 + prefixBits + itemBits),
+                2
+            ).toString()
+            while (itemVal.length < itemDigits) itemVal = "0" + itemVal
+
+            val indicator = itemVal.substring(0, 1)
+            val itemRef = itemVal.substring(1)
+
+            val unchecksummed = indicator + prefixVal + itemRef
+            var sum = 0
+            for (i in unchecksummed.indices) {
+                val digit = unchecksummed[i] - '0'
+                sum += digit * if (i % 2 == 0) 3 else 1
+            }
+            val checksum = (10 - (sum % 10)) % 10
+
+            return unchecksummed + checksum
+        } catch (e: Exception) {
+            return null
+        }
     }
 
     private fun tagReadEvent(tags: Array<TagData>) {
@@ -75,19 +127,27 @@ class SearchPageViewModel : ViewModel() {
             for (tag in tags) {
                 val tagId = tag.tagID
 
-                val match = tagId.contains(textGTINValue, ignoreCase = true)
+                val decodedGtin = decodeSGTIN96(tagId)
+
+                val match = tagId.contains(textGTINValue, ignoreCase = true) ||
+                        (decodedGtin != null && decodedGtin.contains(
+                            textGTINValue,
+                            ignoreCase = true
+                        ))
 
                 if (match) {
-                    Log.d("RFID", "MATCH FOUND → $tagId")
+                    Log.d("RFID", "MATCH FOUND → $tagId (Decoded: $decodedGtin)")
 
+                    currentTagPattern = tagId
                     _tagPattern.postValue(tagId)
                     tagFinderStatus = true
 
                     stopInventory()
 
+                    // Ensure smooth transition from inventory to tag locating like in C#
                     Handler(Looper.getMainLooper()).postDelayed({
                         hhTriggerEvent(true)
-                    }, 200)
+                    }, 500) // Increase delay slightly for smooth transition
 
                     break
                 }
@@ -97,7 +157,7 @@ class SearchPageViewModel : ViewModel() {
                 val dist = tag.LocationInfo?.relativeDistance ?: continue
 
                 _relativeDistance.postValue(dist.toString())
-                _distanceBoxHeight.postValue((dist * 3).toInt())
+                _distanceBoxHeight.postValue((dist.toInt() * 3))
             }
         }
     }
@@ -105,32 +165,38 @@ class SearchPageViewModel : ViewModel() {
     fun hhTriggerEvent(pressed: Boolean) {
 
         try {
-            if (tagFinderStatus) {
+            if (tagFinderStatus && !currentTagPattern.isNullOrEmpty()) {
+                val pattern = currentTagPattern ?: return
 
-                val pattern = _tagPattern.value ?: return
-
-                BaseViewModel.rfidModel.locate(pressed, pattern, null)
-
+                if (pressed) {
+                    BaseViewModel.rfidModel.locate(true, pattern, null)
+                } else {
+                    BaseViewModel.rfidModel.locate(false, pattern, null)
+                    _relativeDistance.postValue("0")
+                    _distanceBoxHeight.postValue(0)
+                }
+            } else {
                 if (pressed) {
                     performInventory()
                 } else {
                     stopInventory()
-                    resetSearch()
                 }
-
-            } else {
-                if (pressed) performInventory() else stopInventory()
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun clearSearch() {
+        stopInventory()
+        resetSearch()
     }
 
     private fun resetSearch() {
         Log.d("RFID", "RESET")
 
         tagFinderStatus = false
+        currentTagPattern = null
         _tagPattern.postValue(null)
         _relativeDistance.postValue("0")
         _distanceBoxHeight.postValue(0)
@@ -151,7 +217,7 @@ class SearchPageViewModel : ViewModel() {
         tagFinderStatus = false
         updateIn()
         _isEnabledTextGTIN.value = false
-        performInventory()
+        // Inventory will be started by the physical trigger only
     }
 
     fun showLoading(loading: Boolean) {
@@ -169,8 +235,13 @@ class SearchPageViewModel : ViewModel() {
         _navigateToSettings.value = false
     }
 
-    fun onAlertHandled() { _alertEvent.value = null }
-    fun onConfirmHandled() { _confirmEvent.value = null }
+    fun onAlertHandled() {
+        _alertEvent.value = null
+    }
+
+    fun onConfirmHandled() {
+        _confirmEvent.value = null
+    }
 
     override fun onCleared() {
         updateOut()

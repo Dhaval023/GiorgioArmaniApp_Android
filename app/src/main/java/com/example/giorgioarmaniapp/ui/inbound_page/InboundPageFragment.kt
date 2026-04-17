@@ -44,6 +44,9 @@ class InboundPageFragment : Fragment() {
     private var pendingInboundData: InboundPendingListModel.InboundPendingListResult? = null
 
 
+    private var isClearingBarcode = false
+    private var isClearingProductCode = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -201,7 +204,16 @@ class InboundPageFragment : Fragment() {
         }
 
         etProductIDCode.addTextChangedListener {
+            if (isClearingProductCode) return@addTextChangedListener
             viewModel.productIDCode = it?.toString() ?: ""
+        }
+
+        viewModel.productIDCodeLive.observe(viewLifecycleOwner) { code ->
+            if (code.isEmpty() && etProductIDCode.text.isNotEmpty()) {
+                isClearingProductCode = true
+                etProductIDCode.setText("")
+                isClearingProductCode = false
+            }
         }
 
         btnSave.setOnClickListener {
@@ -213,22 +225,25 @@ class InboundPageFragment : Fragment() {
         val barcodeEntry = view.findViewById<EditText>(R.id.etBarcodeEntry)
 
         barcodeEntry.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                hideKeyboard()
+            if (!hasFocus && viewModel.isBarcodeViewVisible.value == true) {
                 barcodeEntry.requestFocus()
-            } else {
-                hideKeyboard()
-                if (viewModel.isBarcodeViewVisible.value == true) {
-                    barcodeEntry.requestFocus()
-                }
-                hideKeyboard()
             }
         }
 
         barcodeEntry.addTextChangedListener { text ->
+            if (isClearingBarcode) return@addTextChangedListener
             val value = text?.toString() ?: ""
             if (value.isNotEmpty()) {
                 viewModel.barcodeOrProductcode = value
+            }
+        }
+
+        viewModel.clearBarcodeField.observe(viewLifecycleOwner) { shouldClear ->
+            if (shouldClear == true) {
+                isClearingBarcode = true
+                barcodeEntry.setText("")
+                isClearingBarcode = false
+                viewModel.onBarcodeFieldCleared()
             }
         }
     }
